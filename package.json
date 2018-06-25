@@ -1,0 +1,44 @@
+{
+  "name": "skhema",
+  "version": "1.0.0",
+  "description": "JSON Schema utility collection",
+  "main": "lib/index.js",
+  "homepage": "https://github.com/resin-io-modules/skhema",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:resin-io-modules/skhema.git"
+  },
+  "scripts": {
+    "test": "npm run lint && nyc --reporter=lcov ava",
+    "readme": "jsdoc2md --template doc/README.hbs lib/index.js > README.md",
+    "lint": "eslint lib test"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.spec.js"
+    ]
+  },
+  "author": "Resin Inc. <hello@resin.io>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "eslint": "^4.5.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsdoc": "^3.1.2",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^7.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "jsdoc-to-markdown": "^4.0.1",
+    "nyc": "^11.4.1"
+  },
+  "dependencies": {
+    "@types/json-schema": "^6.0.1",
+    "ajv": "^6.5.1",
+    "ajv-keywords": "^3.2.0",
+    "json-schema-merge-allof": "^0.6.0",
+    "lodash": "^4.17.10",
+    "typed-errors": "^1.1.0"
+  }
+}
