@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "JSON Schema utility collection",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "homepage": "https://github.com/resin-io-modules/skhema",
   "repository": {
     "type": "git",
