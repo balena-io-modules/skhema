@@ -373,3 +373,36 @@ _.each(MERGE_TEST_CASES, (testCase, index) => {
 		}
 	})
 })
+
+ava.test('.addFormat() should allow custom formats to be added', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.throws(() => {
+		skhema.validate(schema, testValue)
+	})
+	test.throws(() => {
+		skhema.isValid(schema, testValue)
+	})
+	test.throws(() => {
+		skhema.filter(schema, testValue)
+	})
+	test.throws(() => {
+		skhema.match(schema, testValue)
+	})
+
+	skhema.addFormat('foobar', (value) => {
+		return value === 'foobar'
+	})
+
+	test.notThrows(() => {
+		skhema.validate(schema, testValue)
+	})
+	test.is(skhema.isValid(schema, testValue), true)
+	test.deepEqual(skhema.filter(schema, testValue), testValue)
+	test.is(skhema.match(schema, testValue).valid, true)
+})
