@@ -22,13 +22,17 @@ Documentation
 
 
 * [skhema](#module_skhema)
-    * [.SchemaMismatch](#module_skhema.SchemaMismatch) : <code>Error</code>
-    * [.IncompatibleSchemas](#module_skhema.IncompatibleSchemas) : <code>Error</code>
-    * [.match(schema, object)](#module_skhema.match) ⇒ <code>Object</code>
-    * [.isValid(schema, object)](#module_skhema.isValid) ⇒ <code>Boolean</code>
-    * [.validate(schema, object)](#module_skhema.validate)
-    * [.merge(schemas)](#module_skhema.merge) ⇒ <code>Object</code>
-    * [.filter(schema, object, [options])](#module_skhema.filter) ⇒ <code>Object</code> \| <code>Null</code>
+    * _static_
+        * [.SchemaMismatch](#module_skhema.SchemaMismatch) : <code>Error</code>
+        * [.IncompatibleSchemas](#module_skhema.IncompatibleSchemas) : <code>Error</code>
+        * [.addFormat(format, callback)](#module_skhema.addFormat)
+        * [.match(schema, object)](#module_skhema.match) ⇒ <code>Object</code>
+        * [.isValid(schema, object)](#module_skhema.isValid) ⇒ <code>Boolean</code>
+        * [.validate(schema, object)](#module_skhema.validate)
+        * [.merge(schemas)](#module_skhema.merge) ⇒ <code>Object</code>
+        * [.filter(schema, object, [options])](#module_skhema.filter) ⇒ <code>Object</code> \| <code>Null</code>
+    * _inner_
+        * [~formatValidationCallback](#module_skhema..formatValidationCallback) : <code>function</code>
 
 <a name="module_skhema.SchemaMismatch"></a>
 
@@ -42,6 +46,26 @@ Documentation
 **Kind**: static property of [<code>skhema</code>](#module_skhema)  
 **Summary**: Incompatible schemas error  
 **Access**: public  
+<a name="module_skhema.addFormat"></a>
+
+### skhema.addFormat(format, callback)
+Add a custom format type, along with a validation function.
+
+**Kind**: static method of [<code>skhema</code>](#module_skhema)  
+**Summary**: Add a custom format  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| format | <code>String</code> | The name of the format |
+| callback | <code>formatValidationCallback</code> | The format validation callback |
+
+**Example**  
+```js
+skhema.addFormat('markdown', (value) => {
+	return typeof value === 'string'
+})
+```
 <a name="module_skhema.match"></a>
 
 ### skhema.match(schema, object) ⇒ <code>Object</code>
@@ -185,6 +209,18 @@ console.log(result)
 >	 foo: 1
 > }
 ```
+<a name="module_skhema..formatValidationCallback"></a>
+
+### skhema~formatValidationCallback : <code>function</code>
+This callback is called when validating a custom format. It should return
+true if the value is valid or false otherwise
+
+**Kind**: inner typedef of [<code>skhema</code>](#module_skhema)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>\*</code> | The value to validate |
+
 
 Tests
 -----
