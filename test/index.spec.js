@@ -45,6 +45,108 @@ ava.test('.match() should report back an error if no schema', (test) => {
 	})
 })
 
+ava.test('.match() should report back an error if an empty array of schemas is passed', (test) => {
+	const result = skhema.match([], {
+		foo: 'bar'
+	})
+
+	test.deepEqual(result, {
+		valid: false,
+		errors: [
+			'no schema'
+		]
+	})
+})
+
+ava.test('match() should accept an array of schemas', (test) => {
+	const firstSchema = {
+		$id: 'firstSchema',
+		type: 'object',
+		additionalProperties: false,
+		properties: {
+			data: {
+				foo: {
+					type: 'number'
+				}
+			}
+		}
+	}
+
+	const secondSchema = {
+		$id: 'secondSchema',
+		type: 'object',
+		properties: {
+			bar: {
+				type: 'number'
+			}
+		}
+	}
+	const testValue = {
+		bar: 1
+	}
+
+	test.throws(() => {
+		skhema.validate(firstSchema, testValue)
+	}, skhema.SchemaMismatch)
+
+	const error = skhema.match([ secondSchema, firstSchema ], testValue)
+
+	test.deepEqual(error, {
+		valid: false,
+		errors: [
+			'data should NOT have additional properties'
+		]
+	})
+
+	const result = skhema.match([ firstSchema, secondSchema ], testValue)
+
+	test.deepEqual(result, {
+		valid: true,
+		errors: []
+	})
+})
+
+ava.test('.match() should should accept an array of schemas with references', (test) => {
+	const baseSchema = {
+		$id: 'baseSchema',
+		type: 'object',
+		additionalProperties: false,
+		properties: {
+			foo: {
+				type: 'number'
+			}
+		}
+	}
+
+	const referencingSchema = {
+		$id: 'referencingSchema',
+		type: 'object',
+		additionalProperties: false,
+		properties: {
+			data: {
+				$ref: 'baseSchema'
+			}
+		}
+	}
+
+	const testValue = {
+		data: {
+			foo: 1
+		}
+	}
+
+	test.throws(() => {
+		skhema.validate(referencingSchema, testValue)
+	}, skhema.MissingRefError)
+
+	const result = skhema.match([ baseSchema, referencingSchema ], testValue)
+
+	test.deepEqual(result, {
+		valid: true,
+		errors: []
+	})
+})
+
 ava.test('.match() should report back a single error', (test) => {
 	const result = skhema.match({
 		type: 'object',
