@@ -1581,3 +1581,149 @@ ava.test('.filter() should correctly filter using nested anyOf statements', (tes
 		type: 'user'
 	})
 })
+
+ava.test('.restrictSchema() should remove conflicting schema properties', (test) => {
+	const subjectSchema = {
+		type: 'object',
+		properties: {
+			slug: {
+				type: 'string',
+				pattern: '^user-[a-z0-9-]+$'
+			},
+			data: {
+				type: 'object',
+				properties: {
+					email: {
+						type: 'string',
+						format: 'email'
+					},
+					password: {
+						type: 'object',
+						properties: {
+							hash: {
+								type: 'string',
+								pattern: '^[a-f0-9]+$'
+							}
+						},
+						required: [ 'hash' ]
+					},
+					roles: {
+						type: 'array',
+						items: {
+							type: 'string',
+							pattern: '^[a-z0-9-]+$'
+						}
+					}
+				},
+				required: [
+					'email',
+					'roles'
+				]
+			}
+		},
+		required: [ 'slug', 'data' ]
+	}
+
+	const restrictiveSchema = {
+		type: 'object',
+		properties: {
+			id: {
+				type: 'string'
+			},
+			slug: {
+				type: 'string',
+				not: {
+					enum: [
+						'user-admin',
+						'user-guest',
+						'user-actions'
+					]
+				}
+			},
+			type: {
+				type: 'string',
+				const: 'user'
+			},
+			data: {
+				type: 'object',
+				required: [ 'email', 'roles' ],
+				additionalProperties: false,
+				properties: {
+					email: {
+						type: 'string'
+					},
+					roles: {
+						type: 'array'
+					}
+				}
+			}
+		},
+		required: [ 'id', 'slug', 'type', 'data' ]
+	}
+
+	test.deepEqual(skhema.restrictSchema(subjectSchema, restrictiveSchema), {
+		type: 'object',
+		properties: {
+			slug: {
+				type: 'string',
+				pattern: '^user-[a-z0-9-]+$'
+			},
+			data: {
+				type: 'object',
+				properties: {
+					email: {
+						type: 'string',
+						format: 'email'
+					},
+					roles: {
+						type: 'array',
+						items: {
+							type: 'string',
+							pattern: '^[a-z0-9-]+$'
+						}
+					}
+				},
+				required: [
+					'email',
+					'roles'
+				]
+			}
+		},
+		required: [ 'slug', 'data' ]
+	})
+})
+
+ava.test('.restrictSchema() should correctly handle const', (test) => {
+	const subjectSchema = {
+		type: 'object',
+		properties: {
+			slug: {
+				type: 'string',
+				pattern: 'my_username'
+			}
+		},
+		required: [ 'slug' ]
+	}
+
+	const restrictiveSchema = {
+		type: 'object',
+		properties: {
+			id: {
+				type: 'number',
+				const: 12345
+			}
+		},
+		required: [ 'slug' ]
+	}
+
+	test.deepEqual(skhema.restrictSchema(subjectSchema, restrictiveSchema), {
+		type: 'object',
+		properties: {
+			slug: {
+				type: 'string',
+				pattern: 'my_username'
+			}
+		},
+		required: [ 'slug' ]
+	})
+})

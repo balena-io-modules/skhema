@@ -10,7 +10,7 @@
     "url": "git@github.com:resin-io-modules/skhema.git"
   },
   "scripts": {
-    "test": "npm run lint && nyc --reporter=lcov ava",
+    "test": "npm run lint && nyc --reporter=lcov ava -v",
     "mutate": "stryker run",
     "readme": "jsdoc2md --template doc/README.hbs lib/index.js > README.md",
     "lint": "eslint lib test",

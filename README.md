@@ -24,6 +24,7 @@ Documentation
 * [skhema](#module_skhema)
     * [.SchemaMismatch](#module_skhema.SchemaMismatch) : <code>Error</code>
     * [.IncompatibleSchemas](#module_skhema.IncompatibleSchemas) : <code>Error</code>
+    * [.restrictSchema(subjectSchema, restrictingSchema)](#module_skhema.restrictSchema) ⇒ <code>Object</code>
     * [.scoreMatch(schema, object)](#module_skhema.scoreMatch) ⇒ <code>Number</code>
     * [.match(schema, object, [options])](#module_skhema.match) ⇒ <code>Object</code>
     * [.isValid(schema, object, [options])](#module_skhema.isValid) ⇒ <code>Boolean</code>
@@ -44,6 +45,59 @@ Documentation
 **Kind**: static property of [<code>skhema</code>](#module_skhema)  
 **Summary**: Incompatible schemas error  
 **Access**: public  
+<a name="module_skhema.restrictSchema"></a>
+
+### skhema.restrictSchema(subjectSchema, restrictingSchema) ⇒ <code>Object</code>
+Removes values from a subject schema so that a value that
+matches the resulting schema will also validate against the restricting
+schema.
+
+**Kind**: static method of [<code>skhema</code>](#module_skhema)  
+**Summary**: Restrict a schema using another schema  
+**Returns**: <code>Object</code> - restricted schema  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| subjectSchema | <code>Object</code> | schema |
+| restrictingSchema | <code>Object</code> | schema |
+
+**Example**  
+```js
+const result = skhema.restrictSchema({
+	 type: 'object',
+	 properties: {
+		 foo: {
+			 type: 'number'
+		 },
+		 bar: {
+			 type: 'string'
+		 }
+	 },
+	 required: [ 'foo' ]
+}, {
+	 type: 'object',
+	 properties: {
+		 foo: {
+			 type: 'number'
+		 }
+	 },
+	 additionalProperties: false,
+	 required: [ 'foo' ]
+})
+
+console.log(result)
+> {
+>   type: 'object',
+>   properties: {
+>  	 foo: {
+>  		 type: 'number'
+>  	 },
+>   },
+>   additionalProperties: false,
+>   required: [ 'foo' ]
+> }
+```
 <a name="module_skhema.scoreMatch"></a>
 
 ### skhema.scoreMatch(schema, object) ⇒ <code>Number</code>
