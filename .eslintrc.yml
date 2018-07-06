@@ -315,8 +315,7 @@ rules:
     - always
   prefer-const:
     - error
-  prefer-reflect:
-    - error
+  prefer-reflect: 0
   prefer-spread:
     - error
   prefer-numeric-literals:

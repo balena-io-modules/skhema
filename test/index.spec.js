@@ -19,6 +19,12 @@ const ava = require('ava')
 const skhema = require('..')
 const MERGE_TEST_CASES = require('./merge.json')
 
+const customFormats = {
+	foobar: (value) => {
+		return value === 'foobar'
+	}
+}
+
 ava.test('.match() should validate a matching object', (test) => {
 	const result = skhema.match({
 		type: 'object'
@@ -105,6 +111,35 @@ ava.test('.match() should not match if the schema is not a valid schema', (test)
 	})
 })
 
+ava.test('.match() should fail if an unknown format is used', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.throws(() => {
+		skhema.match(schema, testValue)
+	})
+})
+
+ava.test('.match() should allow custom formats to be added', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.is(
+		skhema.match(schema, testValue, {
+			customFormats
+		}).valid,
+		true
+	)
+})
+
 ava.test('.isValid() should return true if there is a match', (test) => {
 	const result = skhema.isValid({
 		type: 'object'
@@ -128,6 +163,35 @@ ava.test('.isValid() should return false if there is no match', (test) => {
 	})
 
 	test.false(result)
+})
+
+ava.test('.isValid() should fail if an unknown format is used', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.throws(() => {
+		skhema.isValid(schema, testValue)
+	})
+})
+
+ava.test('.isValid() should allow custom formats to be added', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.is(
+		skhema.isValid(schema, testValue, {
+			customFormats
+		}),
+		true
+	)
 })
 
 ava.test('.validate() should not throw if the object matches the schema', (test) => {
@@ -172,6 +236,34 @@ ava.test('.validate() should throw if there is more than one error', (test) => {
 			foo: 'bar'
 		})
 	}, skhema.SchemaMismatch)
+})
+
+ava.test('.validate() should fail if an unknown format is used', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.throws(() => {
+		skhema.validate(schema, testValue)
+	})
+})
+
+ava.test('.validate() should allow custom formats to be added', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.notThrows(() => {
+		skhema.validate(schema, testValue, {
+			customFormats
+		})
+	})
 })
 
 ava.test('.filter() should remove additional properties from a top level object', (test) => {
@@ -361,6 +453,35 @@ ava.test('.filter() should correctly use top level properties when interpreting 
 	})
 })
 
+ava.test('.filter() should fail if an unknown format is used', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.throws(() => {
+		skhema.filter(schema, testValue)
+	})
+})
+
+ava.test('.filter() should allow custom formats to be added', (test) => {
+	const schema = {
+		type: 'string',
+		format: 'foobar'
+	}
+
+	const testValue = 'foobar'
+
+	test.deepEqual(
+		skhema.filter(schema, testValue, {
+			customFormats
+		}),
+		testValue
+	)
+})
+
 _.each(MERGE_TEST_CASES, (testCase, index) => {
 	ava.test(`.merge() should merge test case ${index}`, (test) => {
 		if (testCase.expected) {
@@ -372,37 +493,4 @@ _.each(MERGE_TEST_CASES, (testCase, index) => {
 			}, skhema.IncompatibleSchemas)
 		}
 	})
-})
-
-ava.test('.addFormat() should allow custom formats to be added', (test) => {
-	const schema = {
-		type: 'string',
-		format: 'foobar'
-	}
-
-	const testValue = 'foobar'
-
-	test.throws(() => {
-		skhema.validate(schema, testValue)
-	})
-	test.throws(() => {
-		skhema.isValid(schema, testValue)
-	})
-	test.throws(() => {
-		skhema.filter(schema, testValue)
-	})
-	test.throws(() => {
-		skhema.match(schema, testValue)
-	})
-
-	skhema.addFormat('foobar', (value) => {
-		return value === 'foobar'
-	})
-
-	test.notThrows(() => {
-		skhema.validate(schema, testValue)
-	})
-	test.is(skhema.isValid(schema, testValue), true)
-	test.deepEqual(skhema.filter(schema, testValue), testValue)
-	test.is(skhema.match(schema, testValue).valid, true)
 })
