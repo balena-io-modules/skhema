@@ -76,7 +76,7 @@ skhema.addFormat('markdown', (value) => {
 
 | Param | Type | Description |
 | --- | --- | --- |
-| schema | <code>Object</code> | JSON schema |
+| schema | <code>Object</code> \| <code>Array.&lt;Object&gt;</code> | JSON schema |
 | object | <code>Object</code> | object |
 
 **Example**  
