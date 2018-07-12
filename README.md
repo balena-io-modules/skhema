@@ -25,10 +25,9 @@ Documentation
     * _static_
         * [.SchemaMismatch](#module_skhema.SchemaMismatch) : <code>Error</code>
         * [.IncompatibleSchemas](#module_skhema.IncompatibleSchemas) : <code>Error</code>
-        * [.addFormat(format, callback)](#module_skhema.addFormat)
-        * [.match(schema, object)](#module_skhema.match) ⇒ <code>Object</code>
-        * [.isValid(schema, object)](#module_skhema.isValid) ⇒ <code>Boolean</code>
-        * [.validate(schema, object)](#module_skhema.validate)
+        * [.match(schema, object, [options])](#module_skhema.match) ⇒ <code>Object</code>
+        * [.isValid(schema, object, [options])](#module_skhema.isValid) ⇒ <code>Boolean</code>
+        * [.validate(schema, object, [options])](#module_skhema.validate)
         * [.merge(schemas)](#module_skhema.merge) ⇒ <code>Object</code>
         * [.filter(schema, object, [options])](#module_skhema.filter) ⇒ <code>Object</code> \| <code>Null</code>
     * _inner_
@@ -46,38 +45,20 @@ Documentation
 **Kind**: static property of [<code>skhema</code>](#module_skhema)  
 **Summary**: Incompatible schemas error  
 **Access**: public  
-<a name="module_skhema.addFormat"></a>
-
-### skhema.addFormat(format, callback)
-Add a custom format type, along with a validation function.
-
-**Kind**: static method of [<code>skhema</code>](#module_skhema)  
-**Summary**: Add a custom format  
-**Access**: public  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| format | <code>String</code> | The name of the format |
-| callback | <code>formatValidationCallback</code> | The format validation callback |
-
-**Example**  
-```js
-skhema.addFormat('markdown', (value) => {
-	return typeof value === 'string'
-})
-```
 <a name="module_skhema.match"></a>
 
-### skhema.match(schema, object) ⇒ <code>Object</code>
+### skhema.match(schema, object, [options]) ⇒ <code>Object</code>
 **Kind**: static method of [<code>skhema</code>](#module_skhema)  
 **Summary**: Match an object against a schema  
 **Returns**: <code>Object</code> - results  
 **Access**: public  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| schema | <code>Object</code> | JSON schema |
-| object | <code>Object</code> | object |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| schema | <code>Object</code> |  | JSON schema |
+| object | <code>Object</code> |  | object |
+| [options] | <code>Object</code> |  | options |
+| [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 
 **Example**  
 ```js
@@ -95,7 +76,7 @@ if (!results.valid) {
 ```
 <a name="module_skhema.isValid"></a>
 
-### skhema.isValid(schema, object) ⇒ <code>Boolean</code>
+### skhema.isValid(schema, object, [options]) ⇒ <code>Boolean</code>
 This is a shorthand function for `.match()` which can be used
 if the caller is not interested in the actual error messages.
 
@@ -104,10 +85,12 @@ if the caller is not interested in the actual error messages.
 **Returns**: <code>Boolean</code> - whether the object matches the schema  
 **Access**: public  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| schema | <code>Object</code> | JSON schema |
-| object | <code>Object</code> | object |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| schema | <code>Object</code> |  | JSON schema |
+| object | <code>Object</code> |  | object |
+| [options] | <code>Object</code> |  | options |
+| [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 
 **Example**  
 ```js
@@ -123,15 +106,17 @@ if (isValid) {
 ```
 <a name="module_skhema.validate"></a>
 
-### skhema.validate(schema, object)
+### skhema.validate(schema, object, [options])
 **Kind**: static method of [<code>skhema</code>](#module_skhema)  
 **Summary**: Validate an object and throw if invalid  
 **Access**: public  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| schema | <code>Object</code> | JSON schema |
-| object | <code>Object</code> | object |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| schema | <code>Object</code> |  | JSON schema |
+| object | <code>Object</code> |  | object |
+| [options] | <code>Object</code> |  | options |
+| [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 
 **Example**  
 ```js
@@ -188,6 +173,7 @@ console.log(result)
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
 | [options.force] | <code>Boolean</code> | <code>false</code> | force filter |
+| [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 
 **Example**  
 ```js
