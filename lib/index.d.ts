@@ -5,7 +5,7 @@ export interface FilterOptions {
 	force: boolean;
 }
 
-export declare function merge(schema: JSONSchema6[]): JSONSchema6;
+export declare function merge(schema: Array<JSONSchema6 | null>): JSONSchema6;
 
 export declare function isValid(schema: JSONSchema6, value: any): boolean;
 

@@ -494,3 +494,32 @@ _.each(MERGE_TEST_CASES, (testCase, index) => {
 		}
 	})
 })
+
+ava.test('.merge() should ignore null values', (test) => {
+	const schemas = [
+		{
+			type: 'object',
+			properties: {
+				foo: {
+					type: 'string'
+				}
+			},
+			required: [ 'foo' ]
+		},
+		null
+	]
+
+	const result = skhema.merge(schemas)
+
+	test.deepEqual(result, {
+		type: 'object',
+		required: [
+			'foo'
+		],
+		properties: {
+			foo: {
+				type: 'string'
+			}
+		}
+	})
+})
