@@ -355,5 +355,39 @@
 			"type": "object",
 			"additionalProperties": true
 		}
+	},
+	{
+		"schemas": [
+			{
+				"type": "object",
+        "required": [ "foo" ],
+        "properties": {
+          "foo": {
+            "type": "array",
+            "enum": [ "foo", "baz" ]
+          }
+        }
+			},
+			{
+				"type": "object",
+        "required": [ "foo" ],
+        "properties": {
+          "foo": {
+            "type": "array",
+            "enum": [ "foo", "bar", "baz" ]
+          }
+        }
+			}
+		],
+		"expected": {
+      "type": "object",
+      "required": [ "foo" ],
+      "properties": {
+        "foo": {
+          "type": "array",
+          "enum": [ "foo", "baz", "bar" ]
+        }
+      }
+		}
 	}
 ]
