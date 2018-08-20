@@ -527,5 +527,96 @@
       ],
       "required": [ "baz" ]
 		}
+	},
+	{
+		"schemas": [
+			{
+				"type": "object",
+        "anyOf": [
+          {
+            "properties": {
+              "foo": {
+                "type": "string"
+              }
+            },
+            "required": [ "foo" ]
+          },
+          {
+            "properties": {
+              "bar": {
+                "type": "number"
+              }
+            },
+            "required": [ "bar" ]
+          }
+        ]
+			},
+			{
+				"type": "object",
+        "anyOf": [
+          {
+            "properties": {
+              "baz": {
+                "type": "string"
+              }
+            },
+            "required": [ "baz" ]
+          },
+          {
+            "properties": {
+              "boo": {
+                "type": "number"
+              }
+            },
+            "required": [ "boo" ]
+          }
+        ]
+			}
+		],
+		"expected": {
+      "type": "object",
+      "allOf": [
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "foo": {
+                  "type": "string"
+                }
+              },
+              "required": [ "foo" ]
+            },
+            {
+              "properties": {
+                "bar": {
+                  "type": "number"
+                }
+              },
+              "required": [ "bar" ]
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "baz": {
+                  "type": "string"
+                }
+              },
+              "required": [ "baz" ]
+            },
+            {
+              "properties": {
+                "boo": {
+                  "type": "number"
+                }
+              },
+              "required": [ "boo" ]
+            }
+          ]
+        }
+      ]
+    }
 	}
 ]
