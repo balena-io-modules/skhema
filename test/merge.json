@@ -389,5 +389,143 @@
         }
       }
 		}
+	},
+	{
+		"schemas": [
+			{
+				"type": "object",
+        "anyOf": [
+          {
+            "properties": {
+              "foo": {
+                "type": "string",
+                "const": "abc"
+              }
+            },
+            "required": [ "foo" ]
+          },
+          {
+            "properties": {
+              "bar": {
+                "type": "string",
+                "const": "def"
+              }
+            },
+            "required": [ "bar" ]
+          }
+        ]
+			},
+			{
+				"type": "object",
+				"properties": {
+					"baz": {
+						"type": "string",
+            "const": "ghi"
+					}
+				},
+				"required": [ "baz" ]
+			}
+		],
+		"expected": {
+			"type": "object",
+      "properties": {
+        "baz": {
+          "type": "string",
+          "const": "ghi"
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "foo": {
+              "type": "string",
+              "const": "abc"
+            }
+          },
+          "required": [ "foo" ]
+        },
+        {
+          "properties": {
+            "bar": {
+              "type": "string",
+              "const": "def"
+            }
+          },
+          "required": [ "bar" ]
+        }
+      ],
+			"required": [ "baz" ]
+		}
+	},
+	{
+		"schemas": [
+			{
+				"type": "object",
+        "anyOf": [
+          {
+            "anyOf": [
+              {
+                "properties": {
+                  "foo": {
+                    "type": "string",
+                    "const": "abc"
+                  }
+                },
+                "required": [ "foo" ]
+              },
+              {
+                "properties": {
+                  "bar": {
+                    "type": "string",
+                    "const": "def"
+                  }
+                },
+                "required": [ "bar" ]
+              }
+            ]
+          }
+        ]
+			},
+			{
+				"type": "object",
+				"properties": {
+					"baz": {
+						"type": "string",
+            "const": "ghi"
+					}
+				},
+				"required": [ "baz" ]
+			}
+		],
+		"expected": {
+      "type": "object",
+      "properties": {
+        "baz": {
+          "type": "string",
+          "const": "ghi"
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "foo": {
+              "type": "string",
+              "const": "abc"
+            }
+          },
+          "required": [ "foo" ]
+        },
+        {
+          "properties": {
+            "bar": {
+              "type": "string",
+              "const": "def"
+            }
+          },
+          "required": [ "bar" ]
+        }
+      ],
+      "required": [ "baz" ]
+		}
 	}
 ]
