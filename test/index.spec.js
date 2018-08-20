@@ -523,3 +523,46 @@ ava.test('.merge() should ignore null values', (test) => {
 		}
 	})
 })
+
+ava.test('.merge() should not modify the `anyOf` field on an argument schema', (test) => {
+	const schemas = [
+		{
+			type: 'object',
+			anyOf: [
+				{
+					properties: {
+						foo: {
+							type: 'string'
+						}
+					},
+					required: [ 'foo' ]
+				}
+			]
+		},
+		{
+			type: 'object',
+			properties: {
+				foo: {
+					type: 'string'
+				}
+			},
+			required: [ 'foo' ]
+		}
+	]
+
+	skhema.merge(schemas)
+
+	test.deepEqual(schemas[0], {
+		type: 'object',
+		anyOf: [
+			{
+				properties: {
+					foo: {
+						type: 'string'
+					}
+				},
+				required: [ 'foo' ]
+			}
+		]
+	})
+})
