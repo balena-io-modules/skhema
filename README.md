@@ -91,6 +91,7 @@ if the caller is not interested in the actual error messages.
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
+| [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 
 **Example**  
 ```js
@@ -117,6 +118,7 @@ if (isValid) {
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
+| [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 
 **Example**  
 ```js
@@ -174,6 +176,7 @@ console.log(result)
 | [options] | <code>Object</code> |  | options |
 | [options.force] | <code>Boolean</code> | <code>false</code> | force filter |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
+| [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 
 **Example**  
 ```js

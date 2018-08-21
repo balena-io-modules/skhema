@@ -140,6 +140,25 @@ ava.test('.match() should allow custom formats to be added', (test) => {
 	)
 })
 
+ava.test('.match() should allow keywords to be added', (test) => {
+	const schema = {
+		type: 'string',
+		regexp: {
+			pattern: 'OBA',
+			flags: 'i'
+		}
+	}
+
+	const testValue = 'foobar'
+
+	test.is(
+		skhema.match(schema, testValue, {
+			keywords: [ 'regexp' ]
+		}).valid,
+		true
+	)
+})
+
 ava.test('.isValid() should return true if there is a match', (test) => {
 	const result = skhema.isValid({
 		type: 'object'
@@ -189,6 +208,25 @@ ava.test('.isValid() should allow custom formats to be added', (test) => {
 	test.is(
 		skhema.isValid(schema, testValue, {
 			customFormats
+		}),
+		true
+	)
+})
+
+ava.test('.isValid() should allow keywords to be added', (test) => {
+	const schema = {
+		type: 'string',
+		regexp: {
+			pattern: 'OBA',
+			flags: 'i'
+		}
+	}
+
+	const testValue = 'foobar'
+
+	test.is(
+		skhema.isValid(schema, testValue, {
+			keywords: [ 'regexp' ]
 		}),
 		true
 	)
@@ -262,6 +300,24 @@ ava.test('.validate() should allow custom formats to be added', (test) => {
 	test.notThrows(() => {
 		skhema.validate(schema, testValue, {
 			customFormats
+		})
+	})
+})
+
+ava.test('.validate() should allow keywords to be added', (test) => {
+	const schema = {
+		type: 'string',
+		regexp: {
+			pattern: 'OBA',
+			flags: 'i'
+		}
+	}
+
+	const testValue = 'foobar'
+
+	test.notThrows(() => {
+		skhema.validate(schema, testValue, {
+			keywords: [ 'regexp' ]
 		})
 	})
 })
@@ -477,6 +533,25 @@ ava.test('.filter() should allow custom formats to be added', (test) => {
 	test.deepEqual(
 		skhema.filter(schema, testValue, {
 			customFormats
+		}),
+		testValue
+	)
+})
+
+ava.test('.filter() should allow keywords to be added', (test) => {
+	const schema = {
+		type: 'string',
+		regexp: {
+			pattern: 'OBA',
+			flags: 'i'
+		}
+	}
+
+	const testValue = 'foobar'
+
+	test.deepEqual(
+		skhema.filter(schema, testValue, {
+			keywords: [ 'regexp' ]
 		}),
 		testValue
 	)
