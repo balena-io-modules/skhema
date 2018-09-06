@@ -18,6 +18,7 @@ const _ = require('lodash')
 const ava = require('ava')
 const skhema = require('..')
 const MERGE_TEST_CASES = require('./merge.json')
+const SCORE_TEST_CASES = require('./score.json')
 
 const customFormats = {
 	foobar: (value) => {
@@ -34,7 +35,8 @@ ava.test('.match() should validate a matching object', (test) => {
 
 	test.deepEqual(result, {
 		valid: true,
-		errors: []
+		errors: [],
+		score: 1
 	})
 })
 
@@ -47,7 +49,8 @@ ava.test('.match() should report back an error if no schema', (test) => {
 		valid: false,
 		errors: [
 			'no schema'
-		]
+		],
+		score: 0
 	})
 })
 
@@ -67,7 +70,8 @@ ava.test('.match() should report back a single error', (test) => {
 		valid: false,
 		errors: [
 			'data.foo should be number'
-		]
+		],
+		score: 0
 	})
 })
 
@@ -92,7 +96,8 @@ ava.test('.match() should report back more than one error', (test) => {
 		errors: [
 			'data.foo should be number',
 			'data should have required property \'bar\''
-		]
+		],
+		score: 0
 	})
 })
 
@@ -107,7 +112,8 @@ ava.test('.match() should not match if the schema is not a valid schema', (test)
 		valid: false,
 		errors: [
 			'invalid schema'
-		]
+		],
+		score: 0
 	})
 })
 
@@ -639,5 +645,12 @@ ava.test('.merge() should not modify the `anyOf` field on an argument schema', (
 				required: [ 'foo' ]
 			}
 		]
+	})
+})
+
+_.each(SCORE_TEST_CASES, (testCase, index) => {
+	ava.test(`.scoreMatch() should merge test case ${index}`, (test) => {
+		const result = skhema.scoreMatch(testCase.schema, testCase.object)
+		test.is(result, testCase.expected)
 	})
 })

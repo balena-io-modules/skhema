@@ -1,0 +1,176 @@
+[
+  {
+    "schema": {
+      "type": "object"
+    },
+    "object": {
+      "foo": "bar"
+    },
+    "expected": 1
+  },
+  {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "foo": {
+          "type": "string"
+        }
+      }
+    },
+    "object": {
+      "foo": "bar"
+    },
+    "expected": 2
+  },
+  {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "foo": {
+          "type": "string"
+        },
+        "flub": {
+          "type": "string"
+        }
+      }
+    },
+    "object": {
+      "foo": "bar"
+    },
+    "expected": 2
+  },
+  {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "foo": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "object": {
+      "data": {
+        "foo": "bar"
+      }
+    },
+    "expected": 3
+  },
+  {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "foo": {
+          "type": "string"
+        },
+        "bar": {
+          "type": "string"
+        },
+        "fizz": {
+          "type": "string"
+        },
+        "buzz": {
+          "type": "string"
+        }
+      },
+      "required": [ "foo", "bar", "fizz" ]
+    },
+    "object": {
+      "foo": "ipsum",
+      "bar": "ipsum",
+      "fizz": "ipsum",
+      "buzz": "ipsum"
+    },
+    "expected": 8
+  },
+  {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "array": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "object": {
+      "array": [ 1, 2, 3 ]
+    },
+    "expected": 3
+  },
+  {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "foo": {
+          "enum": [ "bar", "fizz", "buzz" ]
+        }
+      }
+    },
+    "object": {
+      "foo": "bar"
+    },
+    "expected": 2
+  },
+  {
+    "schema": {
+      "type": "object",
+      "anyOf": [
+        {
+          "properties": {
+            "foo": {
+              "type": "string"
+            }
+          },
+          "required": [ "foo" ]
+        },
+        {
+          "properties": {
+            "bar": {
+              "type": "string"
+            }
+          },
+          "required": [ "bar" ]
+        }
+      ]
+    },
+    "object": {
+      "foo": "bar"
+    },
+    "expected": 3
+  },
+  {
+    "schema": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "foo": {
+              "type": "string"
+            }
+          },
+          "required": [ "foo" ]
+        },
+        {
+          "properties": {
+            "bar": {
+              "type": "string"
+            }
+          },
+          "required": [ "bar" ]
+        }
+      ]
+    },
+    "object": {
+      "foo": "bar"
+    },
+    "expected": 3
+  }
+]
+
