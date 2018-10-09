@@ -669,6 +669,17 @@ ava.test('.merge() should not modify the `anyOf` field on an argument schema', (
 	})
 })
 
+ava.test('.merge() should add `additionalProperties` true, if merging an empty array', (test) => {
+	const schemas = []
+
+	const finalSchema = skhema.merge(schemas)
+
+	test.deepEqual(finalSchema, {
+		type: 'object',
+		additionalProperties: true
+	})
+})
+
 _.each(SCORE_TEST_CASES, (testCase, index) => {
 	ava.test(`.scoreMatch() should merge test case ${index}`, (test) => {
 		const result = skhema.scoreMatch(testCase.schema, testCase.object)
