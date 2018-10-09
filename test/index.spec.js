@@ -248,6 +248,14 @@ ava.test('.validate() should not throw if the object matches the schema', (test)
 	})
 })
 
+ava.test('.validate() should not throw if the schema is valid', (test) => {
+	test.notThrows(() => {
+		skhema.validate({
+			type: 'object'
+		})
+	})
+})
+
 ava.test('.validate() should throw if there is a single error', (test) => {
 	test.throws(() => {
 		skhema.validate({
@@ -280,6 +288,19 @@ ava.test('.validate() should throw if there is more than one error', (test) => {
 			foo: 'bar'
 		})
 	}, skhema.SchemaMismatch)
+})
+
+ava.test('.validate() should throw if the schema is not valid', (test) => {
+	test.throws(() => {
+		skhema.validate({
+			type: 'object',
+			properties: {
+				name: {
+					enum: [ 'foo', 'foo' ]
+				}
+			}
+		})
+	})
 })
 
 ava.test('.validate() should fail if an unknown format is used', (test) => {
