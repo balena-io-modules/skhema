@@ -248,10 +248,35 @@ ava.test('.validate() should not throw if the object matches the schema', (test)
 	})
 })
 
-ava.test('.validate() should not throw if the schema is valid', (test) => {
+ava.test('.validate() with options.schemaOnly should not throw if the schema is valid', (test) => {
 	test.notThrows(() => {
 		skhema.validate({
-			type: 'object'
+			type: 'object',
+			properties: {
+				foo: {
+					type: 'string'
+				}
+			},
+			require: [ 'foo' ]
+		}, null, {
+			schemaOnly: true
+		})
+	})
+})
+
+ava.test('.validate() with options.schemaOnly should throw if the schema is invalid', (test) => {
+	test.throws(() => {
+		skhema.validate({
+			type: 'object',
+			properties: {
+				foo: {
+					type: 'string',
+					enum: [ 'a', 'a' ]
+				}
+			},
+			require: [ 'foo' ]
+		}, null, {
+			schemaOnly: true
 		})
 	})
 })

@@ -25,6 +25,7 @@ Documentation
     * _static_
         * [.SchemaMismatch](#module_skhema.SchemaMismatch) : <code>Error</code>
         * [.IncompatibleSchemas](#module_skhema.IncompatibleSchemas) : <code>Error</code>
+        * [.scoreMatch(schema, object)](#module_skhema.scoreMatch) ⇒ <code>Number</code>
         * [.match(schema, object, [options])](#module_skhema.match) ⇒ <code>Object</code>
         * [.isValid(schema, object, [options])](#module_skhema.isValid) ⇒ <code>Boolean</code>
         * [.validate(schema, object, [options])](#module_skhema.validate)
@@ -45,6 +46,32 @@ Documentation
 **Kind**: static property of [<code>skhema</code>](#module_skhema)  
 **Summary**: Incompatible schemas error  
 **Access**: public  
+<a name="module_skhema.scoreMatch"></a>
+
+### skhema.scoreMatch(schema, object) ⇒ <code>Number</code>
+Score a matching object and schema based on specificity. Only
+works with values that are valid against the provided schema
+
+**Kind**: static method of [<code>skhema</code>](#module_skhema)  
+**Summary**: Score a schema match by specificity  
+**Returns**: <code>Number</code> - score  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| schema | <code>Object</code> | JSON schema |
+| object | <code>Object</code> | object |
+
+**Example**  
+```js
+const score = skhema.scoreMatch({
+	 type: 'object'
+}, {
+	 foo: 'bar'
+})
+
+console.log(result) // -> 1
+```
 <a name="module_skhema.match"></a>
 
 ### skhema.match(schema, object, [options]) ⇒ <code>Object</code>
@@ -59,6 +86,8 @@ Documentation
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
+| [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
+| [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
 
 **Example**  
 ```js
@@ -92,6 +121,7 @@ if the caller is not interested in the actual error messages.
 | [options] | <code>Object</code> |  | options |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 | [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
+| [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
 
 **Example**  
 ```js
@@ -108,8 +138,12 @@ if (isValid) {
 <a name="module_skhema.validate"></a>
 
 ### skhema.validate(schema, object, [options])
+The `.validate()` method will throw if the provided schema isn't
+valid or if the object doesn't validate against the schema. If you just want
+to validate a schema, you use the `schemaOnly` option.
+
 **Kind**: static method of [<code>skhema</code>](#module_skhema)  
-**Summary**: Validate an object and throw if invalid  
+**Summary**: Validate an object and schema and throw if invalid  
 **Access**: public  
 
 | Param | Type | Default | Description |
@@ -119,6 +153,7 @@ if (isValid) {
 | [options] | <code>Object</code> |  | options |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 | [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
+| [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
 
 **Example**  
 ```js
@@ -177,6 +212,7 @@ console.log(result)
 | [options.force] | <code>Boolean</code> | <code>false</code> | force filter |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 | [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
+| [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
 
 **Example**  
 ```js
