@@ -30,6 +30,7 @@ Documentation
         * [.isValid(schema, object, [options])](#module_skhema.isValid) ⇒ <code>Boolean</code>
         * [.validate(schema, object, [options])](#module_skhema.validate)
         * [.merge(schemas)](#module_skhema.merge) ⇒ <code>Object</code>
+        * [.normaliseRequires(schema)](#module_skhema.normaliseRequires) ⇒ <code>Object</code>
         * [.filter(schema, object, [options])](#module_skhema.filter) ⇒ <code>Object</code> \| <code>Null</code>
     * _inner_
         * [~formatValidationCallback](#module_skhema..formatValidationCallback) : <code>function</code>
@@ -195,6 +196,29 @@ console.log(result)
 >	 maxLength: 3,
 >	 minLength: 2
 > }
+```
+<a name="module_skhema.normaliseRequires"></a>
+
+### skhema.normaliseRequires(schema) ⇒ <code>Object</code>
+**Kind**: static method of [<code>skhema</code>](#module_skhema)  
+**Summary**: Set fields on a schema which are required but do not appear in properties  
+**Returns**: <code>Object</code> - mutated schema  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| schema | <code>Object</code> | schema |
+
+**Example**  
+```js
+const schema = skhema.normaliseRequires({
+	 type: 'object',
+	 properties: {},
+	 required: [ 'foo' ]
+})
+
+console.log(schema.properties)
+> { foo: { additionalProperties: false } }
 ```
 <a name="module_skhema.filter"></a>
 

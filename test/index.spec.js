@@ -17,8 +17,24 @@
 const _ = require('lodash')
 const ava = require('ava')
 const skhema = require('..')
+const jsf = require('json-schema-faker')
+const metaSchema = require('./meta-schema.json')
 const MERGE_TEST_CASES = require('./merge.json')
 const SCORE_TEST_CASES = require('./score.json')
+
+const AXIOM_ITERATIONS = 100
+const SCHEMA_ITERATIONS = 50
+
+jsf.option({
+	optionalsProbability: 0.8
+})
+
+// Restrict required fields to prevent properties from appearing twice
+const generateValidSchema = (schema) => {
+	const result = jsf.generate(schema)
+	result.required = _.uniq(result.required)
+	return skhema.normaliseRequires(result)
+}
 
 const customFormats = {
 	foobar: (value) => {
@@ -559,6 +575,312 @@ ava.test('.filter() should correctly use top level properties when interpreting 
 		foo: 'hello',
 		bar: 'foo'
 	})
+})
+
+ava.test('.filter() should insert fields which are required', (test) => {
+	const schema = {
+		type: 'object',
+		properties: {},
+		required: [ 'foo' ]
+	}
+
+	const element = {
+		foo: true
+	}
+
+	test.is(true, skhema.isValid(schema, element))
+
+	const filtered = skhema.filter(schema, element)
+
+	test.is(true, skhema.isValid(schema, filtered))
+})
+
+ava.test('.filter() should handle additionalProperties inside anyOf correctly', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const usersWithoutID = _.map(users, (user) => {
+		return _.omit(user, 'id')
+	})
+
+	const implicit = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					slug: {
+						type: 'string'
+					}
+				},
+				required: [ 'slug' ]
+			}
+		],
+		required: [ 'type' ],
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		}
+	}, _.cloneDeep(users))
+	test.deepEqual(implicit, usersWithoutID)
+
+	const internal = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					slug: {
+						type: 'string'
+					}
+				},
+				additionalProperties: true,
+				required: [ 'slug' ]
+			}
+		],
+		required: [ 'type' ],
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		}
+	}, _.cloneDeep(users))
+
+	test.deepEqual(internal, users)
+
+	const external = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					slug: {
+						type: 'string'
+					}
+				},
+				required: [ 'slug' ]
+			}
+		],
+		required: [ 'type' ],
+		additionalProperties: true,
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		}
+	}, _.cloneDeep(users))
+
+	test.deepEqual(external, users)
+
+	const trueFalse = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					slug: {
+						type: 'string'
+					}
+				},
+				additionalProperties: false,
+				required: [ 'slug' ]
+			}
+		],
+		required: [ 'type' ],
+		additionalProperties: true,
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		}
+	}, _.cloneDeep(users))
+
+	test.deepEqual(trueFalse, usersWithoutID)
+
+	const falseTrue = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					slug: {
+						type: 'string'
+					}
+				},
+				additionalProperties: true,
+				required: [ 'slug' ]
+			}
+		],
+		required: [ 'type' ],
+		additionalProperties: false,
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		}
+	}, _.cloneDeep(users))
+
+	test.deepEqual(falseTrue, usersWithoutID)
+})
+
+ava.test('axioms: match(a) => match(filter(a))', (test) => {
+	// This only holds if the generated schema does not have required fields
+	// which are not present in properties
+	_.each(_.range(SCHEMA_ITERATIONS), () => {
+		const schema = generateValidSchema(metaSchema)
+
+		_.each(_.range(AXIOM_ITERATIONS), () => {
+			const element = jsf.generate(schema)
+
+			const shouldPass = skhema.match(schema, element)
+
+			test.is(shouldPass.valid, true)
+
+			const filtered = skhema.filter(schema, element)
+
+			const filterResult = skhema.match(schema, filtered)
+
+			test.is(filterResult.valid, true)
+		})
+	})
+})
+
+ava.test('axioms: filter(a) == filter(filter(a))', (test) => {
+	_.each(_.range(SCHEMA_ITERATIONS), () => {
+		const schema = generateValidSchema(metaSchema)
+
+		_.each(_.range(AXIOM_ITERATIONS), () => {
+			const element = jsf.generate(schema)
+
+			const firstPass = skhema.filter(schema, element)
+
+			test.deepEqual(firstPass, skhema.filter(schema, firstPass))
+		})
+	})
+})
+
+ava.test('normaliseRequires(): will set a property named foo with additionalProperties: false', (test) => {
+	const schema = {
+		properties: {
+			bar: {
+				type: 'integer'
+			}
+		},
+		required: [
+			'foo',
+			'bar'
+		],
+		additionalProperties: false,
+		type: 'object'
+	}
+
+	const validSchema = skhema.normaliseRequires(schema)
+
+	test.deepEqual({
+		properties: {
+			bar: {
+				type: 'integer'
+			},
+			foo: {
+				additionalProperties: false
+			}
+		},
+		required: [
+			'foo',
+			'bar'
+		],
+		additionalProperties: false,
+		type: 'object'
+	}, validSchema)
+})
+
+ava.test('.filter() should pick properties correctly when using anyOf', (test) => {
+	const result = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				properties: {
+					foo: {
+						type: 'string'
+					}
+				},
+				required: [ 'foo' ]
+			},
+			{
+				properties: {
+					baz: {
+						type: 'string'
+					}
+				},
+				required: [ 'baz' ]
+			}
+		],
+		properties: {
+			bar: {
+				type: 'string'
+			}
+		}
+	}, [
+		{
+			foo: 'foo',
+			bar: 'bar',
+			baz: 'baz'
+		},
+		{
+			foo: 'foo',
+			bar: 'bar'
+		},
+		{
+			baz: 'baz',
+			bar: 'bar'
+		},
+		{
+			bar: 'bar'
+		},
+		{
+			quz: 'quz'
+		},
+		{
+			foo: 'foo',
+			baz: 'baz'
+		}
+	])
+
+	test.deepEqual(result, [
+		{
+			foo: 'foo',
+			bar: 'bar',
+			baz: 'baz'
+		},
+		{
+			foo: 'foo',
+			bar: 'bar'
+		},
+		{
+			baz: 'baz',
+			bar: 'bar'
+		},
+		{
+			foo: 'foo',
+			baz: 'baz'
+		}
+	])
 })
 
 ava.test('.filter() should fail if an unknown format is used', (test) => {
