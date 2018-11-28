@@ -390,6 +390,14 @@ ava.test('.validate() should allow keywords to be added', (test) => {
 	})
 })
 
+ava.test('.filter() should throw an error if no object is provided', (test) => {
+	test.throws(() => {
+		skhema.filter({
+			type: 'object'
+		})
+	})
+})
+
 ava.test('.filter() should remove additional properties from a top level object', (test) => {
 	const result = skhema.filter({
 		type: 'object',
@@ -440,33 +448,6 @@ ava.test('.filter() should not remove properties given explicit additionalProper
 	})
 })
 
-ava.test('.filter() should not remove properties given explicit additionalProperties and force: true', (test) => {
-	const result = skhema.filter({
-		type: 'object',
-		additionalProperties: true,
-		properties: {
-			foo: {
-				type: 'number'
-			},
-			bar: {
-				type: 'string'
-			}
-		},
-		required: [ 'foo', 'bar' ]
-	}, {
-		foo: 1,
-		bar: 'foo',
-		baz: 'qux'
-	}, {
-		force: true
-	})
-
-	test.deepEqual(result, {
-		foo: 1,
-		bar: 'foo'
-	})
-})
-
 ava.test('.filter() should return null if there is no match', (test) => {
 	const result = skhema.filter({
 		type: 'object',
@@ -489,6 +470,17 @@ ava.test('.filter() should return null if there is no match', (test) => {
 })
 
 ava.test('.filter() should remove additional properties from a nested object', (test) => {
+	const value = {
+		foo: 1,
+		bar: {
+			baz: 'hello',
+			qux: {
+				foo: 'bar'
+			}
+		},
+		baz: 'qux'
+	}
+
 	const result = skhema.filter({
 		type: 'object',
 		properties: {
@@ -506,16 +498,7 @@ ava.test('.filter() should remove additional properties from a nested object', (
 			}
 		},
 		required: [ 'foo', 'bar' ]
-	}, {
-		foo: 1,
-		bar: {
-			baz: 'hello',
-			qux: {
-				foo: 'bar'
-			}
-		},
-		baz: 'qux'
-	})
+	}, value)
 
 	test.deepEqual(result, {
 		foo: 1,
@@ -595,7 +578,10 @@ ava.test('.filter() should insert fields which are required', (test) => {
 	test.is(true, skhema.isValid(schema, filtered))
 })
 
-ava.test('.filter() should handle additionalProperties inside anyOf correctly', (test) => {
+ava.test('\
+.filter() if additionalProperties is undefined, it should behave the same as \
+"additionalProperties: false" \
+', (test) => {
 	const users = [
 		{
 			id: '1',
@@ -609,9 +595,187 @@ ava.test('.filter() should handle additionalProperties inside anyOf correctly', 
 		}
 	]
 
-	const usersWithoutID = _.map(users, (user) => {
-		return _.omit(user, 'id')
-	})
+	const result1 = skhema.filter({
+		properties: {
+			slug: {
+				type: 'string'
+			}
+		}
+	}, users)
+
+	test.deepEqual(result1, [
+		{
+			slug: 'user-janedoe'
+		},
+		{
+			slug: 'user-johndoe'
+		}
+	])
+
+	const result2 = skhema.filter({
+		properties: {
+			slug: {
+				type: 'string'
+			}
+		},
+		additionalProperties: false
+	}, users)
+
+	test.deepEqual(result1, result2)
+})
+
+ava.test('\
+.filter() when merging anyOf branch against base schema, if \
+additionalProperties is false on the anyOf, then the anyOf properties \
+overwrite the base properties for simple schemas \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const result = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					slug: {
+						type: 'string'
+					}
+				},
+				required: [ 'slug' ],
+				additionalProperties: false
+			}
+		],
+		required: [ 'type' ],
+		additionalProperties: true,
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		}
+	}, users)
+
+	test.deepEqual(result, [
+		{
+			slug: 'user-janedoe'
+		}, {
+			slug: 'user-johndoe'
+		}
+	])
+})
+
+ava.test('\
+.filter() when merging anyOf branch against base schema, if \
+additionalProperties is false on the anyOf, then the anyOf properties overwrite \
+the base properties for schemas with nested objects \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user',
+			data: {
+				password: 'password123',
+				email: 'janedoe@example.com'
+			}
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user',
+			data: {
+				password: 'Password!1',
+				email: 'janedoe@example.com'
+			}
+		}
+	]
+
+	const result = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					slug: {
+						type: 'string'
+					},
+					data: {
+						type: 'object',
+						properties: {
+							email: {
+								type: 'string'
+							}
+						},
+						additionalProperties: false
+					}
+				},
+				required: [ 'slug', 'data' ],
+				additionalProperties: true
+			}
+		],
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			},
+			data: {
+				type: 'object',
+				properties: {
+					password: {
+						type: 'string'
+					}
+				},
+				additionalProperties: true
+			}
+		},
+		required: [ 'type', 'data' ],
+		additionalProperties: true
+	}, users)
+
+	test.deepEqual(result, [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user',
+			data: {
+				email: 'janedoe@example.com'
+			}
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user',
+			data: {
+				email: 'janedoe@example.com'
+			}
+		}
+	])
+})
+
+ava.test('.filter() The additionalProperties property is not defaulted to false in anyOf branches', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
 
 	const implicit = skhema.filter({
 		type: 'object',
@@ -626,17 +790,43 @@ ava.test('.filter() should handle additionalProperties inside anyOf correctly', 
 				required: [ 'slug' ]
 			}
 		],
-		required: [ 'type' ],
 		properties: {
 			type: {
 				type: 'string',
 				const: 'user'
 			}
-		}
-	}, _.cloneDeep(users))
-	test.deepEqual(implicit, usersWithoutID)
+		},
+		required: [ 'type' ],
+		additionalProperties: false
+	}, users)
 
-	const internal = skhema.filter({
+	test.deepEqual(implicit, [
+		{
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	])
+})
+
+ava.test('.filter() "additionalProperties: true" is respected inside an anyOf branch', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const result = skhema.filter({
 		type: 'object',
 		anyOf: [
 			{
@@ -646,22 +836,50 @@ ava.test('.filter() should handle additionalProperties inside anyOf correctly', 
 						type: 'string'
 					}
 				},
-				additionalProperties: true,
-				required: [ 'slug' ]
+				required: [ 'slug' ],
+				additionalProperties: true
 			}
 		],
-		required: [ 'type' ],
 		properties: {
 			type: {
 				type: 'string',
 				const: 'user'
 			}
+		},
+		required: [ 'type' ],
+		additionalProperties: false
+	}, users)
+
+	test.deepEqual(result, [
+		{
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			slug: 'user-johndoe',
+			type: 'user'
 		}
-	}, _.cloneDeep(users))
+	])
+})
 
-	test.deepEqual(internal, users)
+ava.test('\
+.filter() if additionalProperties is true on the base schema and undefined \
+inside the anyOf branch, no values should be filtered \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
 
-	const external = skhema.filter({
+	const result = skhema.filter({
 		type: 'object',
 		anyOf: [
 			{
@@ -682,11 +900,41 @@ ava.test('.filter() should handle additionalProperties inside anyOf correctly', 
 				const: 'user'
 			}
 		}
-	}, _.cloneDeep(users))
+	}, users)
 
-	test.deepEqual(external, users)
+	test.deepEqual(result, [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	])
+})
 
-	const trueFalse = skhema.filter({
+ava.test('\
+.filter() if additionalProperties is true on the base schema and false inside \
+the anyOf branch, values should be filtered, but the anyOf properties will \
+override the base schema properties \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const result = skhema.filter({
 		type: 'object',
 		anyOf: [
 			{
@@ -696,8 +944,8 @@ ava.test('.filter() should handle additionalProperties inside anyOf correctly', 
 						type: 'string'
 					}
 				},
-				additionalProperties: false,
-				required: [ 'slug' ]
+				required: [ 'slug' ],
+				additionalProperties: false
 			}
 		],
 		required: [ 'type' ],
@@ -708,11 +956,37 @@ ava.test('.filter() should handle additionalProperties inside anyOf correctly', 
 				const: 'user'
 			}
 		}
-	}, _.cloneDeep(users))
+	}, users)
 
-	test.deepEqual(trueFalse, usersWithoutID)
+	test.deepEqual(result, [
+		{
+			slug: 'user-janedoe'
+		},
+		{
+			slug: 'user-johndoe'
+		}
+	])
+})
 
-	const falseTrue = skhema.filter({
+ava.test('\
+.filter() if additionalProperties is false on the base schema and true \
+inside the anyOf branch, values should be filtered by combining the base \
+schema and anyOf branch properties \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const result = skhema.filter({
 		type: 'object',
 		anyOf: [
 			{
@@ -722,8 +996,8 @@ ava.test('.filter() should handle additionalProperties inside anyOf correctly', 
 						type: 'string'
 					}
 				},
-				additionalProperties: true,
-				required: [ 'slug' ]
+				required: [ 'slug' ],
+				additionalProperties: true
 			}
 		],
 		required: [ 'type' ],
@@ -734,9 +1008,18 @@ ava.test('.filter() should handle additionalProperties inside anyOf correctly', 
 				const: 'user'
 			}
 		}
-	}, _.cloneDeep(users))
+	}, users)
 
-	test.deepEqual(falseTrue, usersWithoutID)
+	test.deepEqual(result, [
+		{
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	])
 })
 
 ava.test('axioms: match(a) => match(filter(a))', (test) => {
@@ -808,6 +1091,250 @@ ava.test('normaliseRequires(): will set a property named foo with additionalProp
 		additionalProperties: false,
 		type: 'object'
 	}, validSchema)
+})
+
+ava.test('\
+.filter() If multiple matching anyOf branches match should be merged correctly \
+when both have additionalProperties: false \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const result = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				properties: {
+					slug: {
+						type: 'string',
+						const: 'user-janedoe'
+					}
+				},
+				additionalProperties: false,
+				required: [ 'slug' ]
+			},
+			{
+				properties: {
+					type: {
+						type: 'string',
+						const: 'user'
+					}
+				},
+				additionalProperties: false,
+				required: [ 'type' ]
+			}
+		],
+		properties: {
+			id: {
+				type: 'string'
+			}
+		},
+		additionalProperties: true
+	}, users)
+
+	test.deepEqual(result, [
+		{
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			type: 'user'
+		}
+	])
+})
+
+ava.test('\
+.filter() If multiple matching anyOf branches match should be merged correctly \
+when both have additionalProperties: false and are in a different order \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const result = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				properties: {
+					type: {
+						type: 'string',
+						const: 'user'
+					}
+				},
+				additionalProperties: false,
+				required: [ 'type' ]
+			},
+			{
+				properties: {
+					slug: {
+						type: 'string',
+						const: 'user-janedoe'
+					}
+				},
+				additionalProperties: false,
+				required: [ 'slug' ]
+			}
+		],
+		properties: {
+			id: {
+				type: 'string'
+			}
+		},
+		additionalProperties: true
+	}, users)
+
+	test.deepEqual(result, [
+		{
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			type: 'user'
+		}
+	])
+})
+
+ava.test('\
+.filter() If multiple matching anyOf branches match should be merged correctly \
+when one has additionalProperties: true and the other has false \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const result = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				properties: {
+					slug: {
+						type: 'string',
+						const: 'user-janedoe'
+					}
+				},
+				additionalProperties: true,
+				required: [ 'slug' ]
+			},
+			{
+				properties: {
+					type: {
+						type: 'string',
+						const: 'user'
+					}
+				},
+				additionalProperties: false,
+				required: [ 'type' ]
+			}
+		],
+		properties: {
+			id: {
+				type: 'string'
+			}
+		},
+		additionalProperties: true
+	}, users)
+
+	test.deepEqual(result, [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			type: 'user'
+		}
+	])
+})
+
+ava.test('\
+.filter() If multiple matching anyOf branches match should be merged correctly \
+when both have additionalProperties: true \
+', (test) => {
+	const users = [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	]
+
+	const result = skhema.filter({
+		type: 'object',
+		anyOf: [
+			{
+				properties: {
+					slug: {
+						type: 'string',
+						const: 'user-janedoe'
+					}
+				},
+				additionalProperties: true,
+				required: [ 'slug' ]
+			},
+			{
+				properties: {
+					type: {
+						type: 'string',
+						const: 'user'
+					}
+				},
+				additionalProperties: true,
+				required: [ 'type' ]
+			}
+		],
+		properties: {
+			id: {
+				type: 'string'
+			}
+		},
+		additionalProperties: true
+	}, users)
+
+	test.deepEqual(result, [
+		{
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
+		},
+		{
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
+		}
+	])
 })
 
 ava.test('.filter() should pick properties correctly when using anyOf', (test) => {

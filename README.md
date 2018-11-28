@@ -233,7 +233,6 @@ console.log(schema.properties)
 | schema | <code>Object</code> |  | schema |
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
-| [options.force] | <code>Boolean</code> | <code>false</code> | force filter |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 | [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 | [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
