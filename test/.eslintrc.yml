@@ -1,3 +1,5 @@
 rules:
   max-len:
     - off
+  no-multi-str:
+    - off

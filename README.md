@@ -30,6 +30,7 @@ Documentation
         * [.isValid(schema, object, [options])](#module_skhema.isValid) ⇒ <code>Boolean</code>
         * [.validate(schema, object, [options])](#module_skhema.validate)
         * [.merge(schemas)](#module_skhema.merge) ⇒ <code>Object</code>
+        * [.normaliseRequires(schema)](#module_skhema.normaliseRequires) ⇒ <code>Object</code>
         * [.filter(schema, object, [options])](#module_skhema.filter) ⇒ <code>Object</code> \| <code>Null</code>
     * _inner_
         * [~formatValidationCallback](#module_skhema..formatValidationCallback) : <code>function</code>
@@ -196,6 +197,29 @@ console.log(result)
 >	 minLength: 2
 > }
 ```
+<a name="module_skhema.normaliseRequires"></a>
+
+### skhema.normaliseRequires(schema) ⇒ <code>Object</code>
+**Kind**: static method of [<code>skhema</code>](#module_skhema)  
+**Summary**: Set fields on a schema which are required but do not appear in properties  
+**Returns**: <code>Object</code> - mutated schema  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| schema | <code>Object</code> | schema |
+
+**Example**  
+```js
+const schema = skhema.normaliseRequires({
+	 type: 'object',
+	 properties: {},
+	 required: [ 'foo' ]
+})
+
+console.log(schema.properties)
+> { foo: { additionalProperties: false } }
+```
 <a name="module_skhema.filter"></a>
 
 ### skhema.filter(schema, object, [options]) ⇒ <code>Object</code> \| <code>Null</code>
@@ -209,7 +233,6 @@ console.log(result)
 | schema | <code>Object</code> |  | schema |
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
-| [options.force] | <code>Boolean</code> | <code>false</code> | force filter |
 | [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
 | [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 | [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
