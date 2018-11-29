@@ -1560,3 +1560,52 @@ _.each(SCORE_TEST_CASES, (testCase, index) => {
 		test.is(result, testCase.expected)
 	})
 })
+
+ava.test('Should pick second anyOf branch despite the first one not matching', (test) => {
+	const element = {
+		id: 'd5da0783-2531-45af-be38-806e1ea4490c',
+		slug: 'view-all-views',
+		type: 'view'
+	}
+
+	const schema = {
+		type: 'object',
+		anyOf: [
+			{
+				additionalProperties: true,
+				properties: {
+					slug: {
+						const: 'user-naaxqdmxcursvae1bj4vzhf63oqv80cz',
+						type: 'string'
+					}
+				},
+				required: [
+					'slug'
+				],
+				type: 'object'
+			},
+			{
+				additionalProperties: true,
+				properties: {
+					id: {
+						type: 'string'
+					}
+				},
+				required: [
+					'id'
+				],
+				type: 'object'
+			}
+		],
+		properties: {
+			type: {
+				type: 'string',
+				const: 'view'
+			}
+		}
+	}
+
+	const filtered = skhema.filter(schema, element)
+
+	test.not(filtered, null)
+})
