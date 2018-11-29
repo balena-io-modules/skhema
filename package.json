@@ -11,6 +11,7 @@
   },
   "scripts": {
     "test": "npm run lint && nyc --reporter=lcov ava",
+    "mutate": "stryker run",
     "readme": "jsdoc2md --template doc/README.hbs lib/index.js > README.md",
     "lint": "eslint lib test"
   },
@@ -32,7 +33,11 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "jsdoc-to-markdown": "^4.0.1",
-    "nyc": "^11.4.1"
+    "nyc": "^11.4.1",
+    "stryker": "^0.33.1",
+    "stryker-api": "^0.22.0",
+    "stryker-html-reporter": "^0.16.9",
+    "stryker-javascript-mutator": "^0.12.1"
   },
   "dependencies": {
     "@types/json-schema": "^6.0.1",
