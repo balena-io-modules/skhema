@@ -1576,7 +1576,7 @@ _.each(SCORE_TEST_CASES, (testCase, index) => {
 	})
 })
 
-ava.test('Should pick second anyOf branch despite the first one not matching', (test) => {
+ava.test('.filter() Should pick second anyOf branch despite the first one not matching', (test) => {
 	const element = {
 		id: 'd5da0783-2531-45af-be38-806e1ea4490c',
 		slug: 'view-all-views',
@@ -1623,4 +1623,53 @@ ava.test('Should pick second anyOf branch despite the first one not matching', (
 	const filtered = skhema.filter(schema, element)
 
 	test.not(filtered, null)
+})
+
+ava.test('.filter() should correctly filter using nested anyOf statements', (test) => {
+	const element = {
+		id: '1',
+		slug: 'user-janedoe',
+		type: 'user'
+	}
+
+	const schema = {
+		type: 'object',
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		},
+		anyOf: [
+			{
+				type: 'object',
+				anyOf: [
+					{
+						properties: {
+							slug: {
+								const: 'user-janedoe',
+								type: 'string'
+							}
+						},
+						required: [
+							'slug'
+						],
+						type: 'object',
+						additionalProperties: true
+					}
+				]
+			}
+		],
+		required: [
+			'type'
+		],
+		additionalProperties: false
+	}
+
+	const filtered = skhema.filter(schema, element)
+
+	test.deepEqual(filtered, {
+		slug: 'user-janedoe',
+		type: 'user'
+	})
 })
