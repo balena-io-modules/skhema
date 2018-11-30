@@ -399,6 +399,12 @@ ava.test('.filter() should throw an error if no object is provided', (test) => {
 })
 
 ava.test('.filter() should remove additional properties from a top level object', (test) => {
+	const element = {
+		foo: 1,
+		bar: 'foo',
+		baz: 'qux'
+	}
+
 	const result = skhema.filter({
 		type: 'object',
 		properties: {
@@ -409,12 +415,9 @@ ava.test('.filter() should remove additional properties from a top level object'
 				type: 'string'
 			}
 		},
-		required: [ 'foo', 'bar' ]
-	}, {
-		foo: 1,
-		bar: 'foo',
-		baz: 'qux'
-	})
+		required: [ 'foo', 'bar' ],
+		additionalProperties: false
+	}, element)
 
 	test.deepEqual(result, {
 		foo: 1,
@@ -494,10 +497,12 @@ ava.test('.filter() should remove additional properties from a nested object', (
 						type: 'string'
 					}
 				},
-				required: [ 'baz' ]
+				required: [ 'baz' ],
+				additionalProperties: false
 			}
 		},
-		required: [ 'foo', 'bar' ]
+		required: [ 'foo', 'bar' ],
+		additionalProperties: false
 	}, value)
 
 	test.deepEqual(result, {
@@ -509,6 +514,12 @@ ava.test('.filter() should remove additional properties from a nested object', (
 })
 
 ava.test('.filter() should correctly interpret fragments inside anyOf', (test) => {
+	const element = {
+		foo: 'hello',
+		bar: 'foo',
+		baz: 'qux'
+	}
+
 	const result = skhema.filter({
 		type: 'object',
 		anyOf: [
@@ -517,14 +528,11 @@ ava.test('.filter() should correctly interpret fragments inside anyOf', (test) =
 					foo: {
 						type: 'string'
 					}
-				}
+				},
+				additionalProperties: false
 			}
 		]
-	}, {
-		foo: 'hello',
-		bar: 'foo',
-		baz: 'qux'
-	})
+	}, element)
 
 	test.deepEqual(result, {
 		foo: 'hello'
@@ -532,6 +540,12 @@ ava.test('.filter() should correctly interpret fragments inside anyOf', (test) =
 })
 
 ava.test('.filter() should correctly use top level properties when interpreting fragments inside anyOf', (test) => {
+	const element = {
+		foo: 'hello',
+		bar: 'foo',
+		baz: 'qux'
+	}
+
 	const result = skhema.filter({
 		type: 'object',
 		anyOf: [
@@ -547,12 +561,9 @@ ava.test('.filter() should correctly use top level properties when interpreting 
 			bar: {
 				type: 'string'
 			}
-		}
-	}, {
-		foo: 'hello',
-		bar: 'foo',
-		baz: 'qux'
-	})
+		},
+		additionalProperties: false
+	}, element)
 
 	test.deepEqual(result, {
 		foo: 'hello',
@@ -580,7 +591,7 @@ ava.test('.filter() should insert fields which are required', (test) => {
 
 ava.test('\
 .filter() if additionalProperties is undefined, it should behave the same as \
-"additionalProperties: false" \
+"additionalProperties: true" \
 ', (test) => {
 	const users = [
 		{
@@ -605,10 +616,14 @@ ava.test('\
 
 	test.deepEqual(result1, [
 		{
-			slug: 'user-janedoe'
+			id: '1',
+			slug: 'user-janedoe',
+			type: 'user'
 		},
 		{
-			slug: 'user-johndoe'
+			id: '2',
+			slug: 'user-johndoe',
+			type: 'user'
 		}
 	])
 
@@ -618,7 +633,7 @@ ava.test('\
 				type: 'string'
 			}
 		},
-		additionalProperties: false
+		additionalProperties: true
 	}, users)
 
 	test.deepEqual(result1, result2)
