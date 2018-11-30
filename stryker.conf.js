@@ -5,6 +5,7 @@ module.exports = (configuration) => {
 		packageManager: 'npm',
 		reporters: [ 'html', 'clear-text', 'progress' ],
 		testRunner: 'command',
+		timeoutMS: 100000,
 		commandRunner: {
 			command: './node_modules/.bin/ava --fail-fast'
 		},
