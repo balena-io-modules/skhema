@@ -13,7 +13,8 @@
     "test": "npm run lint && nyc --reporter=lcov ava",
     "mutate": "stryker run",
     "readme": "jsdoc2md --template doc/README.hbs lib/index.js > README.md",
-    "lint": "eslint lib test"
+    "lint": "eslint lib test",
+    "benchmark": "node benchmarks/index.js"
   },
   "ava": {
     "files": [
@@ -24,6 +25,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "ava": "^0.22.0",
+    "bluebird": "^3.5.3",
     "eslint": "^4.5.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
@@ -33,7 +35,9 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "jsdoc-to-markdown": "^4.0.1",
+    "marky": "^1.2.1",
     "nyc": "^11.4.1",
+    "percentile": "^1.2.1",
     "stryker": "^0.33.1",
     "stryker-api": "^0.22.0",
     "stryker-html-reporter": "^0.16.9",
@@ -43,9 +47,10 @@
     "@types/json-schema": "^6.0.1",
     "ajv": "^6.5.1",
     "ajv-keywords": "^3.2.0",
+    "fast-memoize": "^2.5.1",
     "json-schema-faker": "^0.5.0-rc16",
     "json-schema-merge-allof": "^0.6.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "typed-errors": "^1.1.0"
   }
 }
