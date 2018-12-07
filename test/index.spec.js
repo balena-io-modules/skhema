@@ -133,7 +133,7 @@ ava.test('.match() should not match if the schema is not a valid schema', (test)
 	})
 })
 
-ava.test('.match() should fail if an unknown format is used', (test) => {
+ava.test('.match() should not fail if an unknown format is used', (test) => {
 	const schema = {
 		type: 'string',
 		format: 'foobar'
@@ -141,9 +141,7 @@ ava.test('.match() should fail if an unknown format is used', (test) => {
 
 	const testValue = 'foobar'
 
-	test.throws(() => {
-		skhema.match(schema, testValue)
-	})
+	test.true(skhema.match(schema, testValue).valid)
 })
 
 ava.test('.match() should allow custom formats to be added', (test) => {
@@ -152,14 +150,13 @@ ava.test('.match() should allow custom formats to be added', (test) => {
 		format: 'foobar'
 	}
 
-	const testValue = 'foobar'
+	test.true(skhema.match(schema, 'foobar', {
+		customFormats
+	}).valid)
 
-	test.is(
-		skhema.match(schema, testValue, {
-			customFormats
-		}).valid,
-		true
-	)
+	test.false(skhema.match(schema, 'bazbuzz', {
+		customFormats
+	}).valid)
 })
 
 ava.test('.match() should allow keywords to be added', (test) => {
@@ -206,7 +203,7 @@ ava.test('.isValid() should return false if there is no match', (test) => {
 	test.false(result)
 })
 
-ava.test('.isValid() should fail if an unknown format is used', (test) => {
+ava.test.only('.isValid() should pass if an unknown format is used', (test) => {
 	const schema = {
 		type: 'string',
 		format: 'foobar'
@@ -214,9 +211,7 @@ ava.test('.isValid() should fail if an unknown format is used', (test) => {
 
 	const testValue = 'foobar'
 
-	test.throws(() => {
-		skhema.isValid(schema, testValue)
-	})
+	test.true(skhema.isValid(schema, testValue))
 })
 
 ava.test('.isValid() should allow custom formats to be added', (test) => {
@@ -344,7 +339,7 @@ ava.test('.validate() should throw if the schema is not valid', (test) => {
 	})
 })
 
-ava.test('.validate() should fail if an unknown format is used', (test) => {
+ava.test('.validate() should not fail if an unknown format is used', (test) => {
 	const schema = {
 		type: 'string',
 		format: 'foobar'
@@ -352,7 +347,7 @@ ava.test('.validate() should fail if an unknown format is used', (test) => {
 
 	const testValue = 'foobar'
 
-	test.throws(() => {
+	test.notThrows(() => {
 		skhema.validate(schema, testValue)
 	})
 })
@@ -363,13 +358,13 @@ ava.test('.validate() should allow custom formats to be added', (test) => {
 		format: 'foobar'
 	}
 
-	const testValue = 'foobar'
+	test.true(skhema.validate(schema, 'foobar', {
+		customFormats
+	}))
 
-	test.notThrows(() => {
-		skhema.validate(schema, testValue, {
-			customFormats
-		})
-	})
+	test.false(skhema.validate(schema, 'bazbuzz', {
+		customFormats
+	}))
 })
 
 ava.test('.validate() should allow keywords to be added', (test) => {
