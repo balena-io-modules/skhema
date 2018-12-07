@@ -21,6 +21,7 @@ const jsf = require('json-schema-faker')
 const metaSchema = require('./meta-schema.json')
 const MERGE_TEST_CASES = require('./merge.json')
 const SCORE_TEST_CASES = require('./score.json')
+const COMPLEX_SCHEMA = require('./complex-schema.json')
 
 const AXIOM_ITERATIONS = 100
 const SCHEMA_ITERATIONS = 50
@@ -1671,5 +1672,58 @@ ava.test('.filter() should correctly filter using nested anyOf statements', (tes
 	test.deepEqual(filtered, {
 		slug: 'user-janedoe',
 		type: 'user'
+	})
+})
+
+ava.test.only('.pruneAnyOf() should remove conflicting const values', (test) => {
+	const schema = {
+		type: 'object',
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		},
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					type: {
+						const: 'org',
+						type: 'string'
+					}
+				}
+			},
+			{
+				type: 'object',
+				properties: {
+					active: {
+						type: 'boolean',
+						const: true
+					}
+				}
+			}
+		]
+	}
+
+	test.deepEqual(skhema.pruneAnyOf(schema), {
+		type: 'object',
+		properties: {
+			type: {
+				type: 'string',
+				const: 'user'
+			}
+		},
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					active: {
+						type: 'boolean',
+						const: true
+					}
+				}
+			}
+		]
 	})
 })
