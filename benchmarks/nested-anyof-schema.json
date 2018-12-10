@@ -1,0 +1,405 @@
+{
+    "type": "object",
+    "properties": {
+        "active": {
+            "type": "boolean",
+            "const": true
+        },
+        "type": {
+            "type": "string",
+            "const": "execute"
+        },
+        "data": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+                "target",
+                "actor",
+                "payload"
+            ],
+            "properties": {
+                "target": {
+                    "type": "string",
+                    "const": "60b24e13-545f-465b-9bdd-41ae74b220db"
+                },
+                "actor": {
+                    "type": "string",
+                    "const": "2128b532-ddad-4835-9a90-35afed271259"
+                },
+                "payload": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "required": [
+                        "id",
+                        "card"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "const": "148afd3e-9e8b-4f08-8196-c89be0b52827"
+                        },
+                        "card": {
+                            "type": "string",
+                            "const": "9c5deabd-cb01-40bf-aa76-2491da77f681"
+                        }
+                    }
+                }
+            }
+        },
+        "markers": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "anyOf": [
+                    {
+                        "pattern": "(^|\\+)(user-guest)($|\\+)"
+                    },
+                    {
+                        "enum": [
+                            "user-guest"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "anyOf": [
+        {
+            "type": "object",
+            "required": [
+                "active"
+            ],
+            "anyOf": [
+                {
+                    "properties": {
+                        "data": {
+                            "type": "object",
+                            "additionalProperties": true
+                        },
+                        "slug": {
+                            "anyOf": [
+                                {
+                                    "const": "action-request"
+                                },
+                                {
+                                    "const": "execute"
+                                },
+                                {
+                                    "const": "link"
+                                },
+                                {
+                                    "const": "user"
+                                },
+                                {
+                                    "const": "card"
+                                },
+                                {
+                                    "const": "action"
+                                },
+                                {
+                                    "const": "create"
+                                },
+                                {
+                                    "const": "update"
+                                },
+                                {
+                                    "const": "session"
+                                }
+                            ],
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "type",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "slug",
+                        "type",
+                        "data"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "data": {
+                            "required": [
+                                "timestamp",
+                                "target",
+                                "actor",
+                                "payload"
+                            ],
+                            "type": "object",
+                            "properties": {
+                                "actor": {
+                                    "const": "2128b532-ddad-4835-9a90-35afed271259",
+                                    "type": "string"
+                                },
+                                "payload": {
+                                    "type": "object"
+                                },
+                                "target": {
+                                    "type": "string"
+                                },
+                                "timestamp": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "anyOf": [
+                                {
+                                    "const": "create"
+                                },
+                                {
+                                    "const": "update"
+                                }
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "type",
+                        "data"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "additionalProperties": true,
+                    "properties": {
+                        "data": {
+                            "type": "object",
+                            "additionalProperties": true
+                        },
+                        "type": {
+                            "const": "link",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "data"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "data": {
+                            "type": "object",
+                            "additionalProperties": true
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "slug": {
+                            "anyOf": [
+                                {
+                                    "const": "action-create-session"
+                                },
+                                {
+                                    "const": "action-create-user"
+                                },
+                                {
+                                    "const": "action-create-card"
+                                },
+                                {
+                                    "const": "action-update-card"
+                                },
+                                {
+                                    "const": "action-create-event"
+                                }
+                            ],
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "action",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "slug",
+                        "type",
+                        "data"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "additionalProperties": true,
+                    "properties": {
+                        "data": {
+                            "required": [
+                                "actor"
+                            ],
+                            "type": "object",
+                            "additionalProperties": true,
+                            "properties": {
+                                "actor": {
+                                    "const": "2128b532-ddad-4835-9a90-35afed271259",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "execute",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "data"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "data": {
+                            "required": [
+                                "actor",
+                                "target",
+                                "action",
+                                "timestamp",
+                                "arguments",
+                                "executed"
+                            ],
+                            "type": "object",
+                            "properties": {
+                                "action": {
+                                    "type": "string"
+                                },
+                                "actor": {
+                                    "const": "2128b532-ddad-4835-9a90-35afed271259",
+                                    "type": "string"
+                                },
+                                "arguments": {
+                                    "type": "object"
+                                },
+                                "executed": {
+                                    "type": "boolean"
+                                },
+                                "result": {
+                                    "type": "object",
+                                    "additionalProperties": true
+                                },
+                                "target": {
+                                    "type": "string"
+                                },
+                                "timestamp": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "action-request",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "type",
+                        "data"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "additionalProperties": true,
+                    "properties": {
+                        "slug": {
+                            "const": "user-guest",
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "user",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "slug",
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "additionalProperties": true,
+                    "properties": {
+                        "data": {
+                            "required": [
+                                "actor"
+                            ],
+                            "type": "object",
+                            "additionalProperties": true,
+                            "properties": {
+                                "actor": {
+                                    "const": "2128b532-ddad-4835-9a90-35afed271259",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "session",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "data",
+                        "id",
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "additionalProperties": false,
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "slug": {
+                            "not": {
+                                "anyOf": [
+                                    {
+                                        "const": "user-admin"
+                                    }
+                                ]
+                            },
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "user",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "type"
+                    ],
+                    "type": "object"
+                }
+            ],
+            "properties": {
+                "active": {
+                    "const": true,
+                    "type": "boolean"
+                }
+            }
+        }
+    ],
+    "additionalProperties": true,
+    "required": [
+        "active",
+        "type",
+        "data"
+    ]
+}

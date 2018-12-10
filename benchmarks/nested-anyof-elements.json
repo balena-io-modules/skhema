@@ -1,0 +1,41 @@
+[
+    {
+        "active": true,
+        "capabilities": [],
+        "data": {
+            "actor": "2128b532-ddad-4835-9a90-35afed271259",
+            "payload": {
+                "card": "9c5deabd-cb01-40bf-aa76-2491da77f681",
+                "data": {
+                    "active": true,
+                    "capabilities": [],
+                    "data": {
+                        "actor": "9c5deabd-cb01-40bf-aa76-2491da77f681",
+                        "expiration": "2018-12-12T16:17:07.010Z"
+                    },
+                    "id": "10a48ecf-4148-48f5-90d3-b6ea04a87387",
+                    "links": {},
+                    "markers": [],
+                    "requires": [],
+                    "slug": "session-user-nazrhom-1544026626486",
+                    "tags": [],
+                    "type": "session",
+                    "version": "1.0.0"
+                },
+                "error": false,
+                "id": "148afd3e-9e8b-4f08-8196-c89be0b52827",
+                "timestamp": "2018-12-05T16:17:06.486Z"
+            },
+            "target": "60b24e13-545f-465b-9bdd-41ae74b220db",
+            "timestamp": "2018-12-05T16:17:07.257Z"
+        },
+        "id": "ddf986cf-2de5-42dd-90a9-796a663b55a0",
+        "links": {},
+        "markers": [],
+        "requires": [],
+        "slug": "execute-2128b532-ddad-4835-9a90-35afed271259-1544026627257",
+        "tags": [],
+        "type": "execute",
+        "version": "1.0.0"
+    }
+]
