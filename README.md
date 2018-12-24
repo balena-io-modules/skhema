@@ -22,18 +22,15 @@ Documentation
 
 
 * [skhema](#module_skhema)
-    * _static_
-        * [.SchemaMismatch](#module_skhema.SchemaMismatch) : <code>Error</code>
-        * [.IncompatibleSchemas](#module_skhema.IncompatibleSchemas) : <code>Error</code>
-        * [.scoreMatch(schema, object)](#module_skhema.scoreMatch) ⇒ <code>Number</code>
-        * [.match(schema, object, [options])](#module_skhema.match) ⇒ <code>Object</code>
-        * [.isValid(schema, object, [options])](#module_skhema.isValid) ⇒ <code>Boolean</code>
-        * [.validate(schema, object, [options])](#module_skhema.validate)
-        * [.merge(schemas)](#module_skhema.merge) ⇒ <code>Object</code>
-        * [.normaliseRequires(schema)](#module_skhema.normaliseRequires) ⇒ <code>Object</code>
-        * [.filter(schema, object, [options])](#module_skhema.filter) ⇒ <code>Object</code> \| <code>Null</code>
-    * _inner_
-        * [~formatValidationCallback](#module_skhema..formatValidationCallback) : <code>function</code>
+    * [.SchemaMismatch](#module_skhema.SchemaMismatch) : <code>Error</code>
+    * [.IncompatibleSchemas](#module_skhema.IncompatibleSchemas) : <code>Error</code>
+    * [.scoreMatch(schema, object)](#module_skhema.scoreMatch) ⇒ <code>Number</code>
+    * [.match(schema, object, [options])](#module_skhema.match) ⇒ <code>Object</code>
+    * [.isValid(schema, object, [options])](#module_skhema.isValid) ⇒ <code>Boolean</code>
+    * [.validate(schema, object, [options])](#module_skhema.validate)
+    * [.merge(schemas)](#module_skhema.merge) ⇒ <code>Object</code>
+    * [.normaliseRequires(schema)](#module_skhema.normaliseRequires) ⇒ <code>Object</code>
+    * [.filter(schema, object, [options])](#module_skhema.filter) ⇒ <code>Object</code> \| <code>Null</code>
 
 <a name="module_skhema.SchemaMismatch"></a>
 
@@ -86,8 +83,6 @@ console.log(result) // -> 1
 | schema | <code>Object</code> |  | JSON schema |
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
-| [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
-| [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 | [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
 
 **Example**  
@@ -120,8 +115,6 @@ if the caller is not interested in the actual error messages.
 | schema | <code>Object</code> |  | JSON schema |
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
-| [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
-| [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 | [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
 
 **Example**  
@@ -152,8 +145,6 @@ to validate a schema, you use the `schemaOnly` option.
 | schema | <code>Object</code> |  | JSON schema |
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
-| [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
-| [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 | [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
 
 **Example**  
@@ -233,8 +224,6 @@ console.log(schema.properties)
 | schema | <code>Object</code> |  | schema |
 | object | <code>Object</code> |  | object |
 | [options] | <code>Object</code> |  | options |
-| [options.customFormats] | <code>customFormats</code> | <code>{}</code> | custom formats |
-| [options.keywords] | <code>Array.&lt;String&gt;</code> |  | additional keywords to use (see https://github.com/epoberezkin/ajv-keywords) |
 | [options.schemaOnly] | <code>Boolean</code> | <code>false</code> | Only validate the schema |
 
 **Example**  
@@ -257,18 +246,6 @@ console.log(result)
 >	 foo: 1
 > }
 ```
-<a name="module_skhema..formatValidationCallback"></a>
-
-### skhema~formatValidationCallback : <code>function</code>
-This callback is called when validating a custom format. It should return
-true if the value is valid or false otherwise
-
-**Kind**: inner typedef of [<code>skhema</code>](#module_skhema)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| value | <code>\*</code> | The value to validate |
-
 
 Tests
 -----
