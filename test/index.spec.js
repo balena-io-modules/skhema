@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-const _ = require('lodash')
 const ava = require('ava')
-const skhema = require('..')
 const jsf = require('json-schema-faker')
+const range = require('lodash.range')
+const uniq = require('lodash.uniq')
+const skhema = require('..')
 const metaSchema = require('./meta-schema.json')
 const MERGE_TEST_CASES = require('./merge.json')
 const SCORE_TEST_CASES = require('./score.json')
@@ -32,7 +33,7 @@ jsf.option({
 // Restrict required fields to prevent properties from appearing twice
 const generateValidSchema = (schema) => {
 	const result = jsf.generate(schema)
-	result.required = _.uniq(result.required)
+	result.required = uniq(result.required)
 	return skhema.normaliseRequires(result)
 }
 
@@ -964,10 +965,10 @@ schema and anyOf branch properties \
 ava.test('axioms: match(a) => match(filter(a))', (test) => {
 	// This only holds if the generated schema does not have required fields
 	// which are not present in properties
-	_.each(_.range(SCHEMA_ITERATIONS), () => {
+	range(SCHEMA_ITERATIONS).forEach(() => {
 		const schema = generateValidSchema(metaSchema)
 
-		_.each(_.range(AXIOM_ITERATIONS), () => {
+		range(AXIOM_ITERATIONS).forEach(() => {
 			const element = jsf.generate(schema)
 
 			const shouldPass = skhema.match(schema, element)
@@ -984,10 +985,10 @@ ava.test('axioms: match(a) => match(filter(a))', (test) => {
 })
 
 ava.test('axioms: filter(a) == filter(filter(a))', (test) => {
-	_.each(_.range(SCHEMA_ITERATIONS), () => {
+	range(SCHEMA_ITERATIONS).forEach(() => {
 		const schema = generateValidSchema(metaSchema)
 
-		_.each(_.range(AXIOM_ITERATIONS), () => {
+		range(AXIOM_ITERATIONS).forEach(() => {
 			const element = jsf.generate(schema)
 
 			const firstPass = skhema.filter(schema, element)
@@ -1381,7 +1382,7 @@ ava.test('.filter() should allow keywords to be added', (test) => {
 	)
 })
 
-_.each(MERGE_TEST_CASES, (testCase, index) => {
+MERGE_TEST_CASES.forEach((testCase, index) => {
 	ava.test(`.merge() should merge test case ${index}`, (test) => {
 		if (testCase.expected) {
 			const result = skhema.merge(testCase.schemas)
@@ -1477,7 +1478,7 @@ ava.test('.merge() should add `additionalProperties` true, if merging an empty a
 	})
 })
 
-_.each(SCORE_TEST_CASES, (testCase, index) => {
+SCORE_TEST_CASES.forEach((testCase, index) => {
 	ava.test(`.scoreMatch() should merge test case ${index}`, (test) => {
 		const result = skhema.scoreMatch(testCase.schema, testCase.object)
 		test.is(result, testCase.expected)
