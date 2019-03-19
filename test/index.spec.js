@@ -16,6 +16,7 @@
 
 const ava = require('ava')
 const jsf = require('json-schema-faker')
+const merge = require('lodash.merge')
 const range = require('lodash.range')
 const uniq = require('lodash.uniq')
 const skhema = require('..')
@@ -1475,6 +1476,59 @@ ava.test('.merge() should add `additionalProperties` true, if merging an empty a
 	test.deepEqual(finalSchema, {
 		type: 'object',
 		additionalProperties: true
+	})
+})
+
+ava.test.only('.merge() should allow custom resolvers to be provided', (test) => {
+	const schema1 = {
+		$$links: {
+			'has attached element': {
+				type: 'object',
+				properties: {
+					id: {
+						type: 'string'
+					}
+				}
+			}
+		}
+	}
+
+	const schema2 = {
+		$$links: {
+			'has attached element': {
+				type: 'object',
+				properties: {
+					slug: {
+						type: 'string'
+					}
+				}
+			}
+		}
+	}
+
+	const finalSchema = skhema.merge([ schema1, schema2 ], {
+		resolvers: {
+			$$links: (values) => {
+				return merge(values[0], values[1])
+			}
+		}
+	})
+
+	test.deepEqual(finalSchema, {
+		$$links: {
+			'has attached element': {
+				type: 'object',
+				properties: {
+					id: {
+						type: 'string'
+					},
+					slug: {
+						type: 'string'
+					}
+				}
+			}
+		},
+		type: 'object'
 	})
 })
 
