@@ -1479,7 +1479,7 @@ ava.test('.merge() should add `additionalProperties` true, if merging an empty a
 	})
 })
 
-ava.test.only('.merge() should allow custom resolvers to be provided', (test) => {
+ava.test('.merge() should allow custom resolvers to be provided', (test) => {
 	const schema1 = {
 		$$links: {
 			'has attached element': {
