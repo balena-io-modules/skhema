@@ -171,6 +171,23 @@
       "foo": "bar"
     },
     "expected": 3
+  },
+  {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "array": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "object": {
+      "array": null
+    },
+    "expected": 2
   }
 ]
 
