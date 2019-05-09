@@ -618,5 +618,39 @@
         }
       ]
     }
+	},
+	{
+		"schemas": [
+			{
+				"type": "object",
+				"properties": {
+					"foo": {
+            "const": 1,
+						"type": "number"
+					}
+				},
+				"required": [ "foo" ]
+			},
+			{
+				"type": "object",
+				"properties": {
+					"foo": {
+            "const": 2,
+						"type": "number"
+					}
+				},
+				"required": [ "foo" ]
+			}
+		],
+		"expected": {
+			"type": "object",
+			"properties": {
+				"foo": {
+          "const": 2,
+					"type": "number"
+				}
+			},
+			"required": [ "foo" ]
+		}
 	}
 ]
