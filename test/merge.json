@@ -22,6 +22,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
 					"type": "number"
@@ -54,6 +55,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
 					"type": "number"
@@ -88,6 +90,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
 					"type": "string",
@@ -120,6 +123,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
 					"type": "string",
@@ -151,6 +155,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
 					"type": "string"
@@ -182,6 +187,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
 					"type": "string",
@@ -215,6 +221,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
 					"type": "string",
@@ -272,6 +279,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
 					"type": "string",
@@ -381,6 +389,7 @@
 		],
 		"expected": {
       "type": "object",
+      "additionalProperties": true,
       "required": [ "foo" ],
       "properties": {
         "foo": {
@@ -428,6 +437,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
       "properties": {
         "baz": {
           "type": "string",
@@ -499,6 +509,7 @@
 		],
 		"expected": {
       "type": "object",
+      "additionalProperties": true,
       "properties": {
         "baz": {
           "type": "string",
@@ -575,6 +586,7 @@
 		],
 		"expected": {
       "type": "object",
+      "additionalProperties": true,
       "allOf": [
         {
           "anyOf": [
@@ -644,6 +656,7 @@
 		],
 		"expected": {
 			"type": "object",
+      "additionalProperties": true,
 			"properties": {
 				"foo": {
           "const": 2,
@@ -651,6 +664,118 @@
 				}
 			},
 			"required": [ "foo" ]
+		}
+	},
+	{
+		"schemas": [
+      {
+        "type": "object",
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "additionalProperties": true
+      }
+		],
+		"expected": {
+			"type": "object",
+      "additionalProperties": false
+		}
+	},
+	{
+		"schemas": [
+      {
+        "type": "object",
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "additionalProperties": false
+      }
+		],
+		"expected": {
+			"type": "object",
+      "additionalProperties": false
+		}
+	},
+	{
+		"schemas": [
+      {
+        "type": "object",
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "additionalProperties": true
+      }
+		],
+		"expected": {
+			"type": "object",
+      "additionalProperties": true
+		}
+	},
+	{
+		"schemas": [
+      {
+        "type": "object",
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "additionalProperties": true,
+        "anyOf": [
+          {
+            "type": "object"
+          }
+        ]
+      }
+		],
+		"expected": {
+			"type": "object",
+      "additionalProperties": true
+		}
+	},
+	{
+		"schemas": [
+      {
+        "type": "object",
+        "additionalProperties": true,
+        "anyOf": [
+          {
+            "type": "object"
+          }
+        ]
+      },
+      {
+        "type": "object",
+        "additionalProperties": true
+      }
+		],
+		"expected": {
+			"type": "object",
+      "additionalProperties": true
+		}
+	},
+	{
+		"schemas": [
+      {
+        "type": "object",
+        "additionalProperties": true,
+        "anyOf": [
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      },
+      {
+        "type": "object",
+        "additionalProperties": true
+      }
+		],
+		"expected": {
+			"type": "object",
+      "additionalProperties": true
 		}
 	}
 ]
