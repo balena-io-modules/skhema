@@ -1414,6 +1414,7 @@ ava.test('.merge() should ignore null values', (test) => {
 
 	test.deepEqual(result, {
 		type: 'object',
+		additionalProperties: true,
 		required: [
 			'foo'
 		],
@@ -1528,7 +1529,8 @@ ava.test('.merge() should allow custom resolvers to be provided', (test) => {
 				}
 			}
 		},
-		type: 'object'
+		type: 'object',
+		additionalProperties: true
 	})
 })
 
