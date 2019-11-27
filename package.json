@@ -1,6 +1,6 @@
 {
   "name": "skhema",
-  "version": "5.2.6",
+  "version": "5.2.7",
   "description": "JSON Schema utility collection",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
