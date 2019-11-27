@@ -985,6 +985,105 @@ ava.test('axioms: match(a) => match(filter(a))', (test) => {
 	})
 })
 
+ava.test('.filter() should correctly handle "enum" inside "anyOf" with a matching element', (test) => {
+	const element = {
+		type: 'user',
+		data: {
+			test: 1
+		}
+	}
+
+	const result = skhema.filter({
+		type: 'object',
+		properties: {
+			type: {
+				type: 'string',
+				enum: [ 'user', 'user@1.0.0' ]
+			},
+			data: {
+				type: 'object',
+				additionalProperties: true
+			}
+		},
+		anyOf: [
+			{
+				type: 'object',
+				required: [ 'type', 'data' ],
+				properties: {
+					type: {
+						type: 'string',
+						enum: [ 'message', 'message@1.0.0' ]
+					},
+					data: {
+						type: 'object',
+						additionalProperties: false
+					}
+				}
+			},
+			{
+				type: 'object',
+				required: [ 'type', 'data' ],
+				properties: {
+					type: {
+						type: 'string',
+						enum: [ 'user', 'user@1.0.0' ]
+					},
+					data: {
+						type: 'object',
+						additionalProperties: false
+					}
+				}
+			}
+		]
+	}, element)
+
+	test.deepEqual(result, {
+		type: 'user',
+		data: {}
+	})
+})
+
+ava.test('.filter() should correctly handle "enum" inside "anyOf" with a non matching element', (test) => {
+	const element = {
+		type: 'message',
+		data: {
+			test: 1
+		}
+	}
+
+	const result = skhema.filter({
+		type: 'object',
+		properties: {
+			type: {
+				type: 'string',
+				enum: [ 'message' ]
+			},
+			data: {
+				type: 'object',
+				additionalProperties: true
+			}
+		},
+		anyOf: [
+			{
+				type: 'object',
+				required: [ 'type', 'data' ],
+				properties: {
+					type: {
+						type: 'string',
+						enum: [ 'user', 'user@1.0.0' ]
+					},
+					data: {
+						type: 'object',
+						additionalProperties: false
+					}
+				}
+			}
+		]
+	}, element)
+
+	test.deepEqual(result, null)
+})
+
 ava.test('axioms: filter(a) == filter(filter(a))', (test) => {
 	range(SCHEMA_ITERATIONS).forEach(() => {
 		const schema = generateValidSchema(metaSchema)
