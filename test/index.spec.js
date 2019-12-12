@@ -1043,6 +1043,58 @@ ava.test('.filter() should correctly handle "enum" inside "anyOf" with a matchin
 	})
 })
 
+ava.test('.filter() should correctly handle "enums" without modifing them', (test) => {
+	// Comment
+	const object = {
+		id: 'ccdca138-e686-486c-a5df-6661be1102a9',
+		slug: 'support-thread-test-thread-10eb964c-70e6-4a50-a0d6-364111416cdd',
+		type: 'support-thread',
+		active: true,
+		version: '1.0.0',
+		name: 'test thread',
+		tags: [],
+		markers: [],
+		created_at: '2019-12-02T11:38:44.949Z',
+		links: {},
+		requires: [],
+		capabilities: [],
+		data: {
+			status: 'open'
+		},
+		updated_at: null,
+		linked_at: {
+			'has attached element': '2019-12-02T11:38:45.071Z'
+		}
+	}
+
+	const schema = {
+		type: 'object',
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					type: {
+						type: 'string',
+						enum: [
+							'support-thread'
+						]
+					}
+				}
+			}
+		],
+		properties: {
+			type: {
+				enum: [
+					'message'
+				]
+			}
+		}
+	}
+
+	const result = skhema.filter(schema, object)
+	test.deepEqual(result, null)
+})
+
 ava.test('.filter() should correctly handle "enum" inside "anyOf" with a non matching element', (test) => {
 	const element = {
 		type: 'message',
