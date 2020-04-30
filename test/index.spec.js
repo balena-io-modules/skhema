@@ -1790,6 +1790,36 @@ ava.test('.filter() should correctly filter using nested anyOf statements', (tes
 	})
 })
 
+ava.test('.filter() should not match if the root properties field does not match', (test) => {
+	const schema = {
+		type: 'object',
+		properties: {
+			slug: {
+				type: 'string',
+				const: 'foo'
+			}
+		},
+		anyOf: [ {
+			type: 'object',
+			properties: {
+				slug: {
+					type: 'string',
+					const: 'bar'
+				}
+			}
+		} ],
+		required: [ 'slug' ]
+	}
+
+	const element = {
+		slug: 'bar'
+	}
+
+	const result = skhema.filter(schema, element)
+
+	test.is(result, null)
+})
+
 ava.test('.restrictSchema() should remove conflicting schema properties', (test) => {
 	const subjectSchema = {
 		type: 'object',
