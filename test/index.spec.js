@@ -324,6 +324,21 @@ ava.test('.filter() should throw an error if no object is provided', (test) => {
 	})
 })
 
+ava.test('.filter() should throw on an invalid schema', (test) => {
+	test.throws(() => {
+		skhema.filter({
+			type: 'object',
+			properties: {
+				foo: {
+					enum: 1
+				}
+			}
+		}, {
+			foo: 'bar'
+		})
+	}, skhema.InvalidSchema)
+})
+
 ava.test('.filter() should remove additional properties from a top level object', (test) => {
 	const element = {
 		foo: 1,
