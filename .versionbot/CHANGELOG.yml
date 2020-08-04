@@ -1,4 +1,14 @@
 - commits:
+    - subject: Switch to typed-error
+      hash: 234c6da3d4b2ca6784d7714a7b7d46813b43310a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 5.3.2
+  date: 2020-08-04T21:33:19.366Z
+- commits:
     - subject: Add .versionbot/CHANGELOG.yml for nested changelogs
       hash: 7c61cf2f1e120944c3aef29dfe208f2e37139a6a
       body: ''
