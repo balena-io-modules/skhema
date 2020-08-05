@@ -1,4 +1,14 @@
 - commits:
+    - subject: Optimize lodash dependencies
+      hash: 403a2a30ba5657cfac5a1711dfb8660bee1cf257
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 5.3.3
+  date: 2020-08-05T09:35:09.905Z
+- commits:
     - subject: Switch to typed-error
       hash: 234c6da3d4b2ca6784d7714a7b7d46813b43310a
       body: ''
