@@ -16,9 +16,9 @@
 
 const ava = require('ava')
 const jsf = require('json-schema-faker')
-const merge = require('lodash.merge')
-const range = require('lodash.range')
-const uniq = require('lodash.uniq')
+const merge = require('lodash/merge')
+const range = require('lodash/range')
+const uniq = require('lodash/uniq')
 const skhema = require('..')
 const metaSchema = require('./meta-schema.json')
 const MERGE_TEST_CASES = require('./merge.json')
