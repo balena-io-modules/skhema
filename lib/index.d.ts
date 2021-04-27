@@ -29,3 +29,5 @@ export declare function match(schema: JSONSchema6, value: any, options?: MatchOp
 export declare function validate(schema: JSONSchema6, value: any, options?: MatchOptions): void;
 
 export declare function filter<T = any>(schema: JSONSchema6, value: any, options?: FilterOptions): Partial<T> | null;
+
+export declare function scoreMatch(schema: JSONSchema6, item: object): number;
