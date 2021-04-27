@@ -1,4 +1,16 @@
 - commits:
+    - subject: Export scoreMatch function type definition
+      hash: 0e84d897d842568e2dcc848b2b86d395c7bce082
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+  version: 5.3.4
+  date: 2021-04-27T02:41:40.498Z
+- commits:
     - subject: Optimize lodash dependencies
       hash: 403a2a30ba5657cfac5a1711dfb8660bee1cf257
       body: ''
