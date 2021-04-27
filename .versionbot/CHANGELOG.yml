@@ -9,7 +9,7 @@
         signed-off-by: Josh Bowling <josh@balena.io>
       author: Josh Bowling
   version: 5.3.4
-  date: 2021-04-27T02:41:40.498Z
+  date: 2021-04-27T14:36:55.236Z
 - commits:
     - subject: Optimize lodash dependencies
       hash: 403a2a30ba5657cfac5a1711dfb8660bee1cf257
