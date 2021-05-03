@@ -1,4 +1,16 @@
 - commits:
+    - subject: Fixed compatibility issues with pattern matching variable assignments
+      hash: c0e65906c17f134741b9490f40e8d1dd98f430a4
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Micah Halter <micah@balena.io>
+        signed-off-by: Micah Halter <micah@balena.io>
+      author: Micah Halter
+  version: 5.3.5
+  date: 2021-05-03T15:44:21.509Z
+- commits:
     - subject: Export scoreMatch function type definition
       hash: 0e84d897d842568e2dcc848b2b86d395c7bce082
       body: ''
