@@ -1,4 +1,16 @@
 - commits:
+    - subject: Enable data option for match
+      hash: ab307790085c19361036e27054e4301724290680
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+  version: 5.3.5
+  date: 2021-08-27T02:27:30.367Z
+- commits:
     - subject: Export scoreMatch function type definition
       hash: 0e84d897d842568e2dcc848b2b86d395c7bce082
       body: ''
