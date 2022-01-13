@@ -9,6 +9,9 @@
     "type": "git",
     "url": "git@github.com:balena-io-modules/skhema.git"
   },
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "scripts": {
     "test": "npm run lint && nyc --reporter=lcov ava -v",
     "mutate": "stryker run",
