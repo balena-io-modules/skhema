@@ -1,4 +1,32 @@
 - commits:
+    - subject: Drop support for node versions prior to v12
+      hash: 1c0a31691eec10579eaedf8b555804487b99fd68
+      body: |
+        We only test for versions 12, 14 and 16 and the recent update to
+        lru-cache also means the package won't support node versions less than
+        10. This change makes sense to ensure consistent behaviour that we can
+        provide some level of assurance for.
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+    - subject: Upgrade to latest version of lru-cache module
+      hash: 6a091ae1f383e35f4b111e165d782ca6f55a11db
+      body: |
+        This update was a major change to the lru-cache dependency. AFAICT the
+        interface remains the same, and the breaking change is that only node
+        versions >= 10 are supported now.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+  version: 6.0.0
+  date: 2022-01-13T16:45:51.052Z
+- commits:
     - subject: Export scoreMatch function type definition
       hash: 0e84d897d842568e2dcc848b2b86d395c7bce082
       body: ''
