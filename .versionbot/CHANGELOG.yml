@@ -1,4 +1,22 @@
 - commits:
+    - subject: 'build(deps): bump lodash.merge from 4.6.1 to 4.6.2'
+      hash: d46e13ca4f67e207f952ab392f64f18ececcc068
+      body: >
+        Bumps [lodash.merge](https://github.com/lodash/lodash) from 4.6.1 to
+        4.6.2.
+
+        - [Release notes](https://github.com/lodash/lodash/releases)
+
+        - [Commits](https://github.com/lodash/lodash/commits)
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: 'dependabot[bot] <support@github.com>'
+        signed-off-by: 'dependabot[bot] <support@github.com>'
+      author: 'dependabot[bot]'
+  version: 6.0.2
+  date: 2022-01-14T10:16:28.981Z
+- commits:
     - subject: Bump path-parse from 1.0.5 to 1.0.7
       hash: e0b07a7dd056aef5f2d930f8ac876979f18ba242
       body: >
