@@ -1,4 +1,17 @@
 - commits:
+    - subject: Fix failing test
+      hash: 1092785c9d7fdd614c3e2a5b08e5972b747858d2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+  version: 6.0.4
+  title: "'Fix failing test'"
+  date: 2022-03-04T02:19:25.394Z
+- commits:
     - subject: Do not fail to validate if `type` is not specified
       hash: 57f97360027ff9603bf7cf9a67b446e97a02822f
       body: ""
