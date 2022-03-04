@@ -1,4 +1,17 @@
 - commits:
+    - subject: Add type for SchemaMismatch error
+      hash: a7dc337166a74ad9570e30d2d10c91e00661d366
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+  version: 6.0.5
+  title: "'Add type for SchemaMismatch error'"
+  date: 2022-03-04T06:28:16.407Z
+- commits:
     - subject: Fix failing test
       hash: 1092785c9d7fdd614c3e2a5b08e5972b747858d2
       body: ""
