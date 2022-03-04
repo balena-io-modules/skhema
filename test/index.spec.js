@@ -115,7 +115,7 @@ ava.test('.match() should report back more than one error', (test) => {
 
 ava.test('.match() should not match if the schema is not a valid schema', (test) => {
 	const result = skhema.match({
-		hello: 'foobar'
+		required: 'foobar'
 	}, {
 		foo: 'bar'
 	})
