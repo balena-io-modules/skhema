@@ -1,4 +1,17 @@
 - commits:
+    - subject: Properly combine anyOf on merge
+      hash: bc5cede31b0c6d5abc4f8e14d6c5961ce84f12aa
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+  version: 6.0.6
+  title: "'Properly combine anyOf on merge'"
+  date: 2022-03-04T07:33:11.761Z
+- commits:
     - subject: Add type for SchemaMismatch error
       hash: a7dc337166a74ad9570e30d2d10c91e00661d366
       body: ""

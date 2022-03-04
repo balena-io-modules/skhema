@@ -1,6 +1,6 @@
 {
   "name": "skhema",
-  "version": "6.0.5",
+  "version": "6.0.6",
   "description": "JSON Schema utility collection",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -59,6 +59,6 @@
     "typed-error": "^3.2.0"
   },
   "versionist": {
-    "publishedAt": "2022-03-04T06:28:16.495Z"
+    "publishedAt": "2022-03-04T07:33:11.855Z"
   }
 }
