@@ -39,7 +39,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "jsdoc-to-markdown": "^4.0.1",
     "marky": "^1.2.1",
-    "nyc": "^11.4.1",
+    "nyc": "^15.1.0",
     "percentile": "^1.2.1",
     "stryker": "^0.33.1",
     "stryker-api": "^0.22.0",
